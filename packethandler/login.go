@@ -17,6 +17,16 @@ func Login(l logindata.LoginData) (string, error) {
 		packets.ChoProtocol(protocolVersion),
 		packets.UserPrivileges(packets.PrivilegeGMTSupporter),
 		packets.FriendList([]int32{}),
+		packets.UserData(packets.UserDataInfo{
+			ID:         1336,
+			PlayerName: "Howl",
+			UTCOffset:  25,
+			Country:    108,
+			Colour:     packets.ColourAdmin,
+			Longitude:  0,
+			Latitude:   0,
+			Rank:       9,
+		}),
 	)
 	return guid, nil
 }
