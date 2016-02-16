@@ -9,7 +9,8 @@ func BanchoString(s string) []byte {
 	if s == "" {
 		return []byte{0}
 	}
-	var r []byte
+	// 11, aka 0x0b, notifies the client that what's following is a string.
+	r := []byte{11}
 	r = append(r, uleb128.Marshal(len(s))...)
 	r = append(r, []byte(s)...)
 	return r
