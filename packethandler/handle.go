@@ -1,7 +1,9 @@
 package packethandler
 
 import (
+	"bytes"
 	"fmt"
+	"git.zxq.co/ripple/go-bancho/inbound"
 	"git.zxq.co/ripple/go-bancho/packethandler/logindata"
 	"time"
 )
@@ -11,6 +13,14 @@ const deliverTimeout = time.Millisecond * 15
 // Handle takes an input and writes data to an output. Not very hard.
 func Handle(input []byte, output *[]byte, token string) (string, error) {
 	sendBackToken := false
+
+	defer func() {
+		c := recover()
+		if c != nil {
+			fmt.Println("ERROR!!!!!!!11!")
+			fmt.Println(c)
+		}
+	}()
 
 	// The user wants to login
 	if token == "" {
@@ -22,6 +32,20 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 		token, err = Login(d)
 		if err != nil {
 			return token, err
+		}
+	} else {
+
+		inputReader := bytes.NewReader(input)
+		for {
+			// Find a new packet from input
+			pack, err := inbound.GetPacket(inputReader)
+			if err != nil {
+				fmt.Println(err)
+			}
+			if !pack.Initialised {
+				break
+			}
+			fmt.Printf("Inbound packet: %d - %s", pack.ID, pack.Content)
 		}
 	}
 
