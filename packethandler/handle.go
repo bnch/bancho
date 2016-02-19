@@ -5,10 +5,7 @@ import (
 	"fmt"
 	"git.zxq.co/ripple/go-bancho/inbound"
 	"git.zxq.co/ripple/go-bancho/packethandler/logindata"
-	"time"
 )
-
-const deliverTimeout = time.Millisecond * 15
 
 // Handle takes an input and writes data to an output. Not very hard.
 func Handle(input []byte, output *[]byte, token string) (string, error) {
