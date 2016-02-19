@@ -1,7 +1,9 @@
 package uleb128
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
 	"testing"
 )
 
@@ -14,6 +16,13 @@ func TestMarshal(t *testing.T) {
 	printHex(Marshal(255))
 	printHex(Marshal(256))
 	printHex(Marshal(624485))
+}
+
+func TestUnmarshalReader(t *testing.T) {
+	b := bytes.NewReader([]byte("\x93\x03fakestringfakestringfakestring"))
+	tot := UnmarshalReader(b)
+	d, _ := ioutil.ReadAll(b)
+	fmt.Printf("TestUnmarshalReader:\nLength: %d\n%s\n", tot, string(d))
 }
 
 func TestUnmarshal(t *testing.T) {

@@ -3,6 +3,10 @@
 // This package takes https://github.com/jerwuqu/uleb128/blob/master/uleb128.js as reference.
 package uleb128
 
+import (
+	"io"
+)
+
 // Marshal converts an int into a uleb128-encoded byte array.
 func Marshal(i int) (r []byte) {
 	var len int
@@ -33,6 +37,25 @@ func Unmarshal(r []byte) (total int, len int) {
 		len++
 		total |= (int(b&0x7F) << shift)
 		if b&0x80 == 0 {
+			break
+		}
+		shift += 7
+	}
+
+	return
+}
+
+// UnmarshalReader unmarshals something with an io.Reader
+func UnmarshalReader(r io.Reader) (total int) {
+	var shift uint
+	var lastByte byte
+
+	for {
+		b := make([]byte, 1)
+		r.Read(b)
+		lastByte = b[0]
+		total |= (int(lastByte&0x7F) << shift)
+		if lastByte&0x80 == 0 {
 			break
 		}
 		shift += 7
