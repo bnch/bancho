@@ -23,6 +23,7 @@ func Migrate(db gorm.DB) error {
 	fmt.Println("==> migrating database...")
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&DBVer{})
 	v := DBVer{}
+	db.First(&v)
 	keys := []uint64{}
 	for k := range migrations {
 		keys = append(keys, k)
@@ -31,8 +32,8 @@ func Migrate(db gorm.DB) error {
 	for _, k := range keys {
 		if k > v.Version {
 			migrations[k](db)
+			v.Version = k
 		}
-		v.Version = k
 	}
 	db.Save(&v)
 	fmt.Println("==> database migrated!")

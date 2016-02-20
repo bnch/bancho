@@ -10,6 +10,7 @@ type Session struct {
 	stream      *packetCollection
 	User        User
 	LastRequest time.Time
+	Terminated  bool
 }
 
 // Push appends an element to the current session.

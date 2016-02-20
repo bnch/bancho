@@ -38,7 +38,7 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		token, err = Login(d)
+		token, err = Login(d, output)
 		if err != nil {
 			return token, err
 		}

@@ -2,6 +2,7 @@ package packethandler
 
 import (
 	"git.zxq.co/ripple/go-bancho/common"
+	"git.zxq.co/ripple/go-bancho/models"
 	"git.zxq.co/ripple/go-bancho/packethandler/logindata"
 	"git.zxq.co/ripple/go-bancho/packets"
 )
@@ -9,30 +10,46 @@ import (
 const protocolVersion = 19
 
 // Login logs the user into bancho. Returns the osu! token and any eventual error.
-func Login(l logindata.LoginData) (string, error) {
-	sess, guid := NewSession(User{
-		ID:   1337,
-		Name: "Howl",
-	})
+func Login(l logindata.LoginData, output *[]byte) (string, error) {
+	sess, guid := NewSession(User{})
 	Sessions[guid] = sess
+
+	user := models.User{}
+	db.Where(&models.User{
+		Username: l.Username,
+	}).First(&user)
+
+	if !common.IsSamePass(l.Password, user.Password) {
+		Sessions[guid].Push(
+			packets.UserID(packets.LoginFailed),
+		)
+		return guid, nil
+	}
+	if (user.Permissions & models.PermissionBanned) != 0 {
+		Sessions[guid].Push(
+			packets.UserID(packets.LoginBanned),
+		)
+		return guid, nil
+	}
+
 	Sessions[guid].Push(
 		packets.SilenceClient(0),
 		packets.UserID(1),
 		packets.ChoProtocol(protocolVersion),
 		packets.UserPrivileges(packets.PrivilegeGMTSupporter),
-		packets.FriendList([]int32{2}),
+		packets.FriendList([]int32{3}),
 		packets.UserData(packets.UserDataInfo{
-			ID:         1,
-			PlayerName: "Howl",
+			ID:         int32(user.ID),
+			PlayerName: user.Username,
 			UTCOffset:  25,
 			Country:    108,
 			Colour:     packets.ColourAdmin,
 			Longitude:  0,
 			Latitude:   0,
-			Rank:       9,
+			Rank:       1337,
 		}),
 		packets.UserDataFull(packets.UserDataFullInfo{
-			ID:         1,
+			ID:         int32(user.ID),
 			Action:     common.StatusIdle,
 			Mods:       0,
 			GameMode:   packets.ModeStandard,
@@ -40,11 +57,11 @@ func Login(l logindata.LoginData) (string, error) {
 			Accuracy:   13.37,
 			Playcount:  1231,
 			TotalScore: 1200200000,
-			Rank:       9,
+			Rank:       1337,
 			PP:         0, // 0 because not implemented
 		}),
 		packets.UserData(packets.UserDataInfo{
-			ID:         2,
+			ID:         3,
 			PlayerName: "Nyo",
 			UTCOffset:  25,
 			Country:    108,
@@ -54,8 +71,8 @@ func Login(l logindata.LoginData) (string, error) {
 			Rank:       8,
 		}),
 		packets.OnlinePlayers([]int32{
-			1,
-			2,
+			int32(user.ID),
+			3,
 		}),
 		packets.P89(),
 		packets.ChannelJoin("#osu"),
