@@ -1,6 +1,7 @@
 package packethandler
 
 import (
+	"git.zxq.co/ripple/go-bancho/common"
 	"git.zxq.co/ripple/go-bancho/packethandler/logindata"
 	"git.zxq.co/ripple/go-bancho/packets"
 )
@@ -9,9 +10,12 @@ const protocolVersion = 19
 
 // Login logs the user into bancho. Returns the osu! token and any eventual error.
 func Login(l logindata.LoginData) (string, error) {
-	guid := GenerateGUID()
-	Tokens[guid] = new(packetCollection)
-	Tokens[guid].Push(
+	sess, guid := NewSession(User{
+		ID:   1337,
+		Name: "Howl",
+	})
+	Sessions[guid] = sess
+	Sessions[guid].Push(
 		packets.SilenceClient(0),
 		packets.UserID(1),
 		packets.ChoProtocol(protocolVersion),
@@ -29,7 +33,7 @@ func Login(l logindata.LoginData) (string, error) {
 		}),
 		packets.UserDataFull(packets.UserDataFullInfo{
 			ID:         1,
-			Action:     packets.StatusIdle,
+			Action:     common.StatusIdle,
 			Mods:       0,
 			GameMode:   packets.ModeStandard,
 			Score:      147200000,

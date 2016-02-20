@@ -5,24 +5,6 @@ import (
 	"encoding/binary"
 )
 
-// User actions
-const (
-	StatusIdle = iota
-	StatusAfk
-	StatusPlaying
-	StatusEditing
-	StatusModding
-	StatusMultiplayer
-	StatusWatching
-	StatusUnknown
-	StatusTesting
-	StatusSubmitting
-	StatusPaused
-	StatusLobby
-	StatusMultiplaying
-	StatusOsuDirect
-)
-
 // UserDataFullInfo is a struct containing all the user data you'll ever need.
 type UserDataFullInfo struct {
 	ID int32

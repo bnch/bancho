@@ -1,5 +1,5 @@
 package packethandler
 
 func init() {
-	Tokens = make(map[string]*packetCollection)
+	Sessions = make(map[string]Session)
 }
