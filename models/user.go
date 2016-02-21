@@ -7,7 +7,7 @@ const (
 	PermissionAdmin
 )
 
-// User is an user on go-bancho.
+// User is an user on bancho.
 type User struct {
 	ID          int
 	Username    string `sql:"size:20"`

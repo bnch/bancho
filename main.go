@@ -11,10 +11,10 @@ import (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "go-bancho"
+	app.Name = "bancho"
 	app.Usage = "custom bancho implementation"
 	app.Action = func(c *cli.Context) {
-		fmt.Println("== Welcome to go-bancho. ==")
+		fmt.Println("== Welcome to bancho. ==")
 		db, err := models.CreateDB()
 		if err != nil {
 			panic(err)

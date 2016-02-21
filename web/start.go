@@ -9,13 +9,13 @@ import (
 	"strconv"
 )
 
-// Start begins the webserver for go-bancho, and starts processing requests to the server.
+// Start begins the webserver for bancho, and starts processing requests to the server.
 func Start(addrHTTP, addrHTTPS string) {
 	certificateExist := true
 	for _, i := range []string{"cert.pem", "key.pem"} {
 		if _, err := os.Stat(i); os.IsNotExist(err) {
 			certificateExist = false
-			fmt.Println("cert and key files were not found in the current directory. go-bancho will not listen on https.")
+			fmt.Println("cert and key files were not found in the current directory. bancho will not listen on https.")
 			break
 		}
 	}
