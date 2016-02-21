@@ -1,19 +1,19 @@
 package web
 
 // StandardPage is the page that is shown if c.ppy.sh is visited with an User-Agent that is not osu!.
-const StandardPage = `
+const StandardPage = `<!DOCTYPE html>
+<html>
+<head>
+<title>bancho</title>
+</head>
+<body>
 <pre>
-           _                 __
-          (_)              /  /
-   ______ __ ____   ____  /  /____
-  /  ___/  /  _  \/  _  \/  /  _  \
- /  /  /  /  /_) /  /_) /  /  ____/
-/__/  /__/  .___/  .___/__/ \_____/
-        /  /   /  /
-       /__/   /__/
+<p style="text-align: center;">
+You are the most akerino person I've ever met.
+Nope. Just kidding.
 
-          SANIC AS FUCK
-             edition
+bancho reporting here. Nice to meet you. Here have a boat.
+</p>
 
 <marquee style="white-space:pre;" scrollamount="20">
                           .. o  .
@@ -25,4 +25,5 @@ const StandardPage = `
               \ . ..  .. . /
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 </marquee>
-</pre>`
+</pre>
+</body>`
