@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"git.zxq.co/ripple/go-bancho/common"
-	"git.zxq.co/ripple/go-bancho/models"
+	"github.com/bnch/bancho/common"
+	"github.com/bnch/bancho/models"
 	"github.com/codegangsta/cli"
 	"github.com/jinzhu/gorm"
 )

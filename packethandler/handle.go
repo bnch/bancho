@@ -3,8 +3,8 @@ package packethandler
 import (
 	"bytes"
 	"fmt"
-	"git.zxq.co/ripple/go-bancho/inbound"
-	"git.zxq.co/ripple/go-bancho/packethandler/logindata"
+	"github.com/bnch/bancho/inbound"
+	"github.com/bnch/bancho/packethandler/logindata"
 	"io"
 )
 

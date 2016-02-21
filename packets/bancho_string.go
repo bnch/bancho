@@ -1,7 +1,7 @@
 package packets
 
 import (
-	"git.zxq.co/ripple/go-bancho/packets/uleb128"
+	"github.com/bnch/bancho/packets/uleb128"
 )
 
 // BanchoString creates a string in the clusterfuck that is bancho.

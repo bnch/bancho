@@ -1,7 +1,7 @@
 package packethandler
 
 import (
-	"git.zxq.co/ripple/go-bancho/inbound"
+	"github.com/bnch/bancho/inbound"
 )
 
 // Packet IDs done by the osu! client.

@@ -1,7 +1,7 @@
 package packethandler
 
 import (
-	"git.zxq.co/ripple/go-bancho/common"
+	"github.com/bnch/bancho/common"
 )
 
 // User represents an user online on bancho.

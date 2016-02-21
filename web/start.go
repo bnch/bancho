@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"git.zxq.co/ripple/go-bancho/packethandler"
+	"github.com/bnch/bancho/packethandler"
 	"io/ioutil"
 	"net/http"
 	"os"

@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"git.zxq.co/ripple/go-bancho/packets/uleb128"
+	"github.com/bnch/bancho/packets/uleb128"
 	"io"
 )
 

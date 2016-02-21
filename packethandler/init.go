@@ -1,7 +1,7 @@
 package packethandler
 
 import (
-	"git.zxq.co/ripple/go-bancho/models"
+	"github.com/bnch/bancho/models"
 	"github.com/jinzhu/gorm"
 )
 

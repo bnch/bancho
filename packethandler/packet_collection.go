@@ -1,7 +1,7 @@
 package packethandler
 
 import (
-	"git.zxq.co/ripple/go-bancho/packets"
+	"github.com/bnch/bancho/packets"
 )
 
 type packetCollection struct {

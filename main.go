@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"git.zxq.co/ripple/go-bancho/cmd"
-	"git.zxq.co/ripple/go-bancho/models"
-	"git.zxq.co/ripple/go-bancho/web"
+	"github.com/bnch/bancho/cmd"
+	"github.com/bnch/bancho/models"
+	"github.com/bnch/bancho/web"
 	"github.com/codegangsta/cli"
 	"os"
 )

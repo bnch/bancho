@@ -1,10 +1,10 @@
 package packethandler
 
 import (
-	"git.zxq.co/ripple/go-bancho/common"
-	"git.zxq.co/ripple/go-bancho/models"
-	"git.zxq.co/ripple/go-bancho/packethandler/logindata"
-	"git.zxq.co/ripple/go-bancho/packets"
+	"github.com/bnch/bancho/common"
+	"github.com/bnch/bancho/models"
+	"github.com/bnch/bancho/packethandler/logindata"
+	"github.com/bnch/bancho/packets"
 )
 
 const protocolVersion = 19
