@@ -13,11 +13,11 @@ func makeFrontend() *gin.Engine {
 	c.Static("/static", "frontend/static")
 
 	c.GET("/signup", func(c *gin.Context) {
-		c.Data(200, "text/html", []byte{})
-		templates["signup"].ExecuteTemplate(c.Writer, "tpl", map[string]interface{}{
+		serveTemplate("signup", gin.H{
 			"Title": "Sign up",
-		})
+		}, 200, c)
 	})
+	c.POST("/signup", signupHandler)
 
 	c.GET("/web/bancho_connect.php", func(c *gin.Context) {
 		c.String(200, "us")

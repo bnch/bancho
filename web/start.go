@@ -2,9 +2,13 @@ package web
 
 import (
 	"fmt"
+	"github.com/bnch/bancho/models"
+	"github.com/jinzhu/gorm"
 	"net/http"
 	"os"
 )
+
+var db gorm.DB
 
 // Start begins the webserver for bancho, and starts processing requests to the server.
 func Start(addrHTTP, addrHTTPS string) {
@@ -21,6 +25,12 @@ func Start(addrHTTP, addrHTTPS string) {
 	setUpTemplates()
 	frontendEngine = makeFrontend()
 	avatarEngine = makeAvatarServer()
+
+	var err error
+	db, err = models.CreateDB()
+	if err != nil {
+		panic(err)
+	}
 
 	handler := &ConnectionHandler{}
 	if certificateExist {
