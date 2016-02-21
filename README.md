@@ -1,4 +1,4 @@
-# Bancho
+# Bancho [![Build Status](https://travis-ci.org/bnch/bancho.svg?branch=master)](https://travis-ci.org/bnch/bancho)
 
 This repository is a clone of the bancho server. Bancho is the software that
 powers [osu!](https://osu.ppy.sh). Currently players of osu! are getting a bit
