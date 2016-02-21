@@ -18,6 +18,7 @@ func Start(addrHTTP, addrHTTPS string) {
 		}
 	}
 
+	setUpTemplates()
 	frontendEngine = makeFrontend()
 	avatarEngine = makeAvatarServer()
 

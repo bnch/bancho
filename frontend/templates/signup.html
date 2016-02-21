@@ -1,0 +1,31 @@
+{{define "content"}}
+<div class="container align-center">
+	<h1 class="nmb">Sign up</h1>
+	<h3 class="h1-desc">Join the circlejerk</h3>
+	<form class="pure-form pure-form-aligned" action="/signup" method="post">
+		<fieldset>
+			<div class="pure-control-group">
+				<label for="username">Username</label>
+				<input id="username" type="text" name="username" placeholder="Mike">
+			</div>
+
+			<div class="pure-control-group">
+				<label for="password">Password</label>
+				<input id="password" type="password" name="password" placeholder="foobar123">
+			</div>
+
+			<div class="pure-control-group">
+				<label for="password2">That password, again</label>
+				<input id="password2" type="password" name="password2" placeholder="foobar123">
+			</div>
+
+			<div class="pure-control-group">
+				<label for="email">Email address</label>
+				<input id="email" type="email" name="email" placeholder="mike@gmail.com">
+			</div>
+
+		</fieldset>
+		<button type="submit" class="pure-button pure-button-primary">Sounds fun!</button>
+	</form>
+</div>
+{{end}}

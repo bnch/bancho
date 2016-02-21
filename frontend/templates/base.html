@@ -1,0 +1,27 @@
+{{define "tpl"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="charset" content="utf-8">
+	<link rel="stylesheet" href="/static/style.min.css" media="screen">
+	<link href='https://fonts.googleapis.com/css?family=Exo+2:400,700,200,100' rel='stylesheet' type='text/css'>
+	<title>{{if .CustomTitle}}{{.CustomTitle}}{{else}}{{if .Title}}bnch - {{.Title}}{{else}}bnch{{end}}{{end}}</title>
+</head>
+<body>
+	<div class="pure-menu pure-menu-horizontal bnch-nav">
+		<a href="#" class="pure-menu-heading pure-menu-link">bnch</a>
+		<ul class="pure-menu-list">
+			<li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
+			<li class="pure-menu-item"><a href="#" class="pure-menu-link">Login</a></li>
+			<li class="pure-menu-item"><a href="#" class="pure-menu-link">Sign up</a></li>
+		</ul>
+	</div>
+
+	<div class="page-content">
+		{{template "content" .}}
+	</div>
+
+	<script src="/static/script.min.js" charset="utf-8"></script>
+</body>
+</html>
+{{end}}
