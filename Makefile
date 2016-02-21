@@ -6,3 +6,6 @@ test:
 
 assets: frontend/Gulpfile.js frontend/package.json
 	cd frontend; npm install; gulp
+
+getdeps:
+	go get -u -v

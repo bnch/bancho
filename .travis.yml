@@ -6,4 +6,4 @@ go:
   - 1.6
   - tip
 
-script: make test build
+script: make getdeps test build
