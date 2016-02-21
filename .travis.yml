@@ -1,3 +1,7 @@
+before_install: # For making assets
+  - sudo apt-get update -q
+  - sudo apt-get install nodejs -y
+
 language: go
 
 go:
@@ -6,6 +10,4 @@ go:
   - 1.6
   - tip
 
-script:
-  - go test ./...
-  - go build
+script: make assets test build
