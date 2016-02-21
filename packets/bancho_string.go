@@ -1,7 +1,7 @@
 package packets
 
 import (
-	"github.com/bnch/bancho/packets/uleb128"
+	"github.com/bnch/uleb128"
 )
 
 // BanchoString creates a string in the clusterfuck that is bancho.

@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/bnch/bancho/packets/uleb128"
+	"github.com/bnch/uleb128"
 	"io"
 )
 
