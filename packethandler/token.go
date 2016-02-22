@@ -23,7 +23,15 @@ func (s Session) Push(val ...packets.Packet) {
 
 // NewSession generates a new session.
 func NewSession(u User) (Session, string) {
-	u.Token = GenerateGUID()
+	var tok string
+	for {
+		tok = GenerateGUID()
+		// Make sure token does not already exist
+		if _, ok := Sessions[tok]; !ok {
+			break
+		}
+	}
+	u.Token = tok
 	return Session{
 		stream:      new(packetCollection),
 		User:        u,
