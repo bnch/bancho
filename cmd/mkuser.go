@@ -1,13 +1,10 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/bnch/bancho/common"
-	"github.com/bnch/bancho/conf"
 	"github.com/bnch/bancho/models"
 	"github.com/codegangsta/cli"
 	"github.com/jinzhu/gorm"
-	"os"
 )
 
 // MkUser puts an user in the database.
@@ -30,15 +27,4 @@ func MkUser(c *cli.Context) {
 		Password:    pass,
 		Permissions: models.PermissionAdmin,
 	})
-}
-func checkConf() bool {
-	if _, err := os.Stat("bancho.ini"); os.IsNotExist(err) {
-		err = conf.WriteSampleConf()
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("We have made a default config file for you. Come back when you're all set up.")
-		return false
-	}
-	return true
 }
