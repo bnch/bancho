@@ -3,6 +3,7 @@ package packets
 import (
 	"bytes"
 	"encoding/binary"
+	"github.com/bnch/bancho/pid"
 )
 
 // These are the various colours an user can have in the osu! chat.
@@ -44,5 +45,5 @@ func UserData(u UserDataInfo) Packet {
 	binary.Write(b, binary.LittleEndian, u.Rank)
 
 	endB := b.Bytes()
-	return MakePacket(PacketUserData, uint32(len(endB)), endB)
+	return MakePacket(pid.BanchoUserPresence, uint32(len(endB)), endB)
 }

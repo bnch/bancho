@@ -3,6 +3,7 @@ package packets
 import (
 	"bytes"
 	"encoding/binary"
+	"github.com/bnch/bancho/pid"
 )
 
 // UserDataFullInfo is a struct containing all the user data you'll ever need.
@@ -46,5 +47,5 @@ func UserDataFull(u UserDataFullInfo) Packet {
 	binary.Write(b, binary.LittleEndian, u.PP)
 
 	endB := b.Bytes()
-	return MakePacket(PacketUserDataFull, uint32(len(endB)), endB)
+	return MakePacket(pid.BanchoHandleUserUpdate, uint32(len(endB)), endB)
 }

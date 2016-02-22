@@ -74,7 +74,7 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 			int32(user.ID),
 			3,
 		}),
-		packets.P89(),
+		packets.ChannelListingComplete(),
 		packets.ChannelJoin("#osu"),
 		packets.ChannelJoin("#announce"),
 		packets.ChannelTitle("#osu", "WELCOME TO THE DANK MEMES", 2),

@@ -1,5 +1,9 @@
 package packets
 
+import (
+	"github.com/bnch/bancho/pid"
+)
+
 // These are the various error codes that can happen on login.
 const (
 	LoginFailed     = -1
@@ -15,5 +19,5 @@ const (
 //
 // In case you wish to do other stuff on login, for instance locking the client, then use one of the constants beginning with `Login`.
 func UserID(userID int32) Packet {
-	return MakePacket(PacketUserID, 4, userID)
+	return MakePacket(pid.BanchoLoginReply, 4, userID)
 }

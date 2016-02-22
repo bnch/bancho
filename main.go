@@ -20,7 +20,7 @@ func main() {
 			panic(err)
 		}
 		models.Migrate(db)
-		web.Start(":3000", "10443")
+		web.Start(":3000", ":10443")
 	}
 	app.Commands = []cli.Command{
 		{

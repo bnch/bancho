@@ -2,6 +2,7 @@
 package pid
 
 // These are all the commands us humans are currently aware of.
+// (as a general rule: packet ID = line number - 7)
 const (
 	OsuSendUserState              = iota // update osu about the user state
 	OsuSendIRCMessage                    // receive message from IRC
@@ -75,10 +76,10 @@ const (
 	BanchoBeatmapInfoReply
 	OsuMatchTransferHost
 	BanchoLoginPermissions
-	BanchoFriendsList
+	BanchoFriendList
 	OsuFriendAdd
 	OsuFriendRemove
-	BanchoNOTSURE // i dunno what's that but it's a bancho packet
+	BanchoProtocolVersion
 	BanchoTitleUpdate
 	OsuMatchChangeTeam
 	OsuChannelLeave

@@ -1,5 +1,9 @@
 package packets
 
+import (
+	"github.com/bnch/bancho/pid"
+)
+
 // User ranks
 const (
 	PrivilegeNormal       = 1
@@ -10,5 +14,5 @@ const (
 
 // UserPrivileges returns a packet with the privileges of the user. Privileges can be picked using the related constants.
 func UserPrivileges(privileges uint32) Packet {
-	return MakePacket(PacketUserPrivileges, 4, privileges)
+	return MakePacket(pid.BanchoLoginPermissions, 4, privileges)
 }
