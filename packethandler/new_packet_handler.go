@@ -3,10 +3,12 @@ package packethandler
 import (
 	"github.com/bnch/bancho/inbound"
 	"github.com/bnch/bancho/pid"
+	"time"
 )
 
 // NewPacketHandler handles inbound packets, and sends them to be analysed by functions, or if it's short by a case itself.
 func NewPacketHandler(pack inbound.BasePacket, s *Session) {
+	s.LastRequest = time.Now()
 	switch pack.ID {
 	case pid.OsuSendUserState:
 		/* E.G.:
@@ -26,5 +28,8 @@ func NewPacketHandler(pack inbound.BasePacket, s *Session) {
 		 */
 	case pid.OsuChannelJoin:
 		// Just a string containing the channel name to join.
+	case pid.OsuExit:
+		// Remove the user from the active users
+		delete(Sessions, s.User.Token)
 	}
 }

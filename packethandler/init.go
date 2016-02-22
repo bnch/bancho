@@ -15,4 +15,5 @@ func SetUp() {
 	if err != nil {
 		panic(err)
 	}
+	go Prune()
 }

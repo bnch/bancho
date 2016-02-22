@@ -34,10 +34,10 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 
 	Sessions[guid].Push(
 		packets.SilenceClient(0),
-		packets.UserID(1),
+		packets.UserID(int32(user.ID)),
 		packets.ChoProtocol(protocolVersion),
 		packets.UserPrivileges(packets.PrivilegeGMTSupporter),
-		packets.FriendList([]int32{3}),
+		packets.FriendList([]int32{9001}),
 		packets.UserData(packets.UserDataInfo{
 			ID:         int32(user.ID),
 			PlayerName: user.Username,
@@ -61,8 +61,8 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 			PP:         0, // 0 because not implemented
 		}),
 		packets.UserData(packets.UserDataInfo{
-			ID:         3,
-			PlayerName: "Nyo",
+			ID:         9001,
+			PlayerName: "Michele Satori",
 			UTCOffset:  25,
 			Country:    108,
 			Colour:     packets.ColourNormal,
@@ -72,7 +72,7 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 		}),
 		packets.OnlinePlayers([]int32{
 			int32(user.ID),
-			3,
+			9001,
 		}),
 		packets.ChannelListingComplete(),
 		packets.ChannelJoin("#osu"),
