@@ -2,20 +2,11 @@ package models
 
 import (
 	"fmt"
+	"github.com/bnch/bancho/conf"
 	"github.com/jinzhu/gorm"
 	"sort"
 	// Hello golint pls dont break balls kthx bye
 	_ "github.com/Go-SQL-Driver/MySQL"
-)
-
-// Temporary until we have a configuration system.
-const (
-	DBUser = "root"
-	DBPass = ""
-	DBName = "bancho"
-	DBHost = "tcp(localhost:3306)"
-	// Database type
-	DB = "mysql"
 )
 
 // Migrate automatically migrates the passed database to the latest version.
@@ -42,7 +33,14 @@ func Migrate(db gorm.DB) error {
 
 // CreateDB creates an instance of a Gorm database.
 func CreateDB() (gorm.DB, error) {
-	db, err := gorm.Open(DB, DBUser+":"+DBPass+"@"+DBHost+"/"+DBName+"?charset=utf8&parseTime=True&loc=Local")
+	c, err := conf.Get()
+	if err != nil {
+		return gorm.DB{}, err
+	}
+	db, err := gorm.Open(
+		c.SQLInfo.DBType,
+		c.SQLInfo.User+":"+c.SQLInfo.Pass+"@"+c.SQLInfo.Host+"/"+c.SQLInfo.Name+"?charset=utf8&parseTime=True&loc=Local",
+	)
 	db.LogMode(true)
 	return db, err
 }

@@ -7,7 +7,8 @@ import (
 
 var db gorm.DB
 
-func init() {
+// SetUp is needed to make things work and should always be called unless you have a very good fucking reason for not doing it.
+func SetUp() {
 	Sessions = make(map[string]Session)
 	var err error
 	db, err = models.CreateDB()
