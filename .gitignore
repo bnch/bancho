@@ -3,3 +3,4 @@ go-bancho
 *.pem
 bancho.ini
 data
+.vscode
