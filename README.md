@@ -26,6 +26,9 @@ in your terminal/command line and check that it's good. We're also assuming that
 you're developing on a UNIX environment, thus the command will be in shell.
 Despite that, commands should be fairly easy to port over to Windows.
 
+We're also gonna assume you have a MySQL database set up. Support for other databases
+may come in the future.
+
 First step: clone the repo.
 
 ```sh
@@ -57,7 +60,11 @@ Third step: change your hosts file to work on bancho.
 
 Fourth step: run the executable file (see below), modify the file
 that just appeared in that directory (bancho.ini), and then start
-the executable again.
+the executable again. 
+
+Note on the config file: if you do not have nginx or apache or whatever
+listening on port 80, just set HTTP's port to 80 for making bancho work
+right out of the box.
 
 ```
 ./bancho
