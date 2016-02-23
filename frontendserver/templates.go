@@ -16,5 +16,10 @@ func setUpTemplates() {
 			templatesDir+"base.html",
 			templatesDir+"page-status.html",
 		)),
+		"index_public": template.Must(template.ParseFiles(
+			templatesDir+"index-public.html",
+			templatesDir+"base.html",
+			templatesDir+"page-status.html",
+		)),
 	}
 }

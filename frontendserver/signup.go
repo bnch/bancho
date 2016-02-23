@@ -85,3 +85,8 @@ func signupError(c *gin.Context, failMessage string) {
 		},
 	}, 200, c)
 }
+func signupGET(c *gin.Context) {
+	serveTemplate("signup", gin.H{
+		"Title": "Sign up",
+	}, 200, c)
+}
