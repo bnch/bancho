@@ -2,3 +2,4 @@ bancho
 go-bancho
 *.pem
 bancho.ini
+data

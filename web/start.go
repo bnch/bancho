@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/bnch/bancho/models"
 	"github.com/bnch/bancho/packethandler"
+	"github.com/bnch/bancho/avatarserver"
 	"github.com/jinzhu/gorm"
 	"net/http"
 	"os"
@@ -25,9 +26,13 @@ func Start(addrHTTP, addrHTTPS string) {
 
 	setUpTemplates()
 	frontendEngine = makeFrontend()
-	avatarEngine = makeAvatarServer()
-
+	
 	var err error
+	err = avatarserver.SetUp()
+	if err != nil {
+		panic(err)
+	}
+
 	db, err = models.CreateDB()
 	if err != nil {
 		panic(err)

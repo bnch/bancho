@@ -4,11 +4,11 @@ import (
 	"compress/gzip"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/bnch/bancho/avatarserver"
 	"net/http"
 	"strings"
 )
 
-var avatarEngine *gin.Engine
 var frontendEngine *gin.Engine
 
 // ConnectionHandler is a very basic connection handler, used to handle the
@@ -21,7 +21,7 @@ func (c ConnectionHandler) serveHTTPReal(w http.ResponseWriter, r *http.Request)
 		// Forward all requests to the bancho server to the bancho handler.
 		BanchoConnectionHandler(w, r)
 	case "a.ppy.sh":
-		avatarEngine.ServeHTTP(w, r)
+		avatarserver.Serve(w, r)
 	default:
 		frontendEngine.ServeHTTP(w, r)
 	}
