@@ -9,6 +9,8 @@ import (
 	_ "github.com/Go-SQL-Driver/MySQL"
 )
 
+var cachedDB *gorm.DB
+
 // Migrate automatically migrates the passed database to the latest version.
 func Migrate(db gorm.DB) error {
 	fmt.Println("==> migrating database...")
@@ -33,6 +35,9 @@ func Migrate(db gorm.DB) error {
 
 // CreateDB creates an instance of a Gorm database.
 func CreateDB() (gorm.DB, error) {
+	if cachedDB != nil {
+		return *cachedDB, nil
+	}
 	c, err := conf.Get()
 	if err != nil {
 		return gorm.DB{}, err
@@ -42,5 +47,8 @@ func CreateDB() (gorm.DB, error) {
 		c.SQLInfo.User+":"+c.SQLInfo.Pass+"@"+c.SQLInfo.Host+"/"+c.SQLInfo.Name+"?charset=utf8&parseTime=True&loc=Local",
 	)
 	db.LogMode(true)
+	if err != nil {
+		cachedDB = &db
+	}
 	return db, err
 }
