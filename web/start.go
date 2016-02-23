@@ -8,6 +8,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"net/http"
 	"os"
+	"log"
 )
 
 var db gorm.DB
@@ -44,9 +45,9 @@ func Start(addrHTTP, addrHTTPS string) {
 	if certificateExist {
 		go func() {
 			fmt.Println("Starting to listen on " + addrHTTPS + "...")
-			http.ListenAndServeTLS(addrHTTPS, "cert.pem", "key.pem", handler)
+			log.Fatal(http.ListenAndServeTLS(addrHTTPS, "cert.pem", "key.pem", handler))
 		}()
 	}
 	fmt.Println("Starting to listen on " + addrHTTP + "...")
-	http.ListenAndServe(addrHTTP, handler)
+	log.Fatal(http.ListenAndServe(addrHTTP, handler))
 }
