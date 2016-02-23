@@ -1,27 +1,33 @@
 {{define "content"}}
 <div class="container align-center">
+	{{if .Status.Failure}}
+		{{template "status-fail" .Status.Failure}}
+	{{end}}
+	{{if .Status.Success}}
+		{{template "status-success" .Status.Success}}
+	{{end}}
 	<h1 class="nmb">Sign up</h1>
 	<h3 class="h1-desc">Join the circlejerk</h3>
 	<form class="pure-form pure-form-aligned" action="/signup" method="post">
 		<fieldset>
 			<div class="pure-control-group">
 				<label for="username">Username</label>
-				<input id="username" type="text" name="username" placeholder="Mike">
+				<input id="username" type="text" name="username" placeholder="Mike"{{if .PostData.Username}} value="{{.PostData.Username}}"{{end}}>
 			</div>
 
 			<div class="pure-control-group">
 				<label for="password">Password</label>
-				<input id="password" type="password" name="password" placeholder="foobar123">
+				<input id="password" type="password" name="password" placeholder="foobar123"{{if .PostData.Password}} value="{{.PostData.Password}}"{{end}}>
 			</div>
 
 			<div class="pure-control-group">
 				<label for="password2">That password, again</label>
-				<input id="password2" type="password" name="password2" placeholder="foobar123">
+				<input id="password2" type="password" name="password2" placeholder="foobar123"{{if .PostData.Password2}} value="{{.PostData.Password2}}"{{end}}>
 			</div>
 
 			<div class="pure-control-group">
 				<label for="email">Email address</label>
-				<input id="email" type="email" name="email" placeholder="mike@gmail.com">
+				<input id="email" type="email" name="email" placeholder="mike@gmail.com"{{if .PostData.Email}} value="{{.PostData.Email}}"{{end}}>
 			</div>
 
 		</fieldset>

@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-const usernameRegexString = "^[a-zA-Z0-9_\\[\\] -]+$"
+const usernameRegexString = "^[a-zA-Z0-9_\\[\\] -]{1,20}$"
 
 func signupHandler(c *gin.Context) {
 	user := c.PostForm("username")
@@ -21,26 +21,26 @@ func signupHandler(c *gin.Context) {
 	// 1. Check that the username is valid.
 	usernameRegex := regexp.MustCompile(usernameRegexString)
 	if !usernameRegex.Match([]byte(user)) {
-		c.String(200, "Username can only contain alphanumeric characters, low dashes, dashes and brackets."+user)
+		signupError(c, "Username can only contain alphanumeric characters, low dashes, dashes and brackets.")
 		return
 	}
 
 	// 2. Check that the passwords are the same.
 	if pass != pass2 {
-		c.String(200, "Passwords are not the same!")
+		signupError(c, "Passwords are not the same!")
 		return
 	}
 
 	// 3. Check password to be long enough. We ain't cunts, so we don't check
 	// the user has written special characters in the password and blah blah blah.
 	if len(pass) < 8 {
-		c.String(200, "Did you know that short passwords are the most likely to be cracked? Please use a password at least 6 characters long.")
+		signupError(c, "Did you know that short passwords are the most likely to be cracked? Please use a password at least 8 characters long.")
 		return
 	}
 
 	// 4. Check email to be valid
 	if !govalidator.IsEmail(email) {
-		c.String(200, "We aren't so dumb to let THAT pass through as an email. Please invent a better one. Bonus if we can send mails to it.")
+		signupError(c, "We aren't so dumb to let THAT pass through as an email. Please invent a better one. Bonus if we can send mails to it.")
 		return
 	}
 
@@ -54,7 +54,7 @@ func signupHandler(c *gin.Context) {
 		} else {
 			samething = "email"
 		}
-		c.String(200, "An user with that same "+samething+" already exists!")
+		signupError(c, "An user with that same "+samething+" already exists!")
 		return
 	}
 
@@ -64,5 +64,18 @@ func signupHandler(c *gin.Context) {
 		Password:    pass,
 		Permissions: models.PermissionAdmin,
 	})
-	c.String(200, "success")
+	serveTemplate("signup", gin.H{
+		"Title": "Sign up",
+		"Status": gin.H{
+			"Success": "Successfully signed you up! You should now be able to login.",
+		},
+	}, 200, c)
+}
+func signupError(c *gin.Context, failMessage string) {
+	serveTemplate("signup", gin.H{
+		"Title": "Sign up",
+		"Status": gin.H{
+			"Failure": failMessage,
+		},
+	}, 200, c)
 }

@@ -1,0 +1,15 @@
+.page-status {
+	width: auto;
+	padding: 10px;
+	border-radius: 3px;
+}
+.page-status--failure {
+	background: #FFDDDD;
+	border: 1px solid #FFAAAA;
+	color: #AA4444;
+}
+.page-status--success {
+	background: #DDFFDD;
+	border: 1px solid #AAFFAA;
+	color: #44AA44;
+}

@@ -7,8 +7,14 @@ import (
 // templates for frontend
 var templates map[string]*template.Template
 
+const templatesDir = "frontend/templates/"
+
 func setUpTemplates() {
 	templates = map[string]*template.Template{
-		"signup": template.Must(template.ParseFiles("frontend/templates/signup.html", "frontend/templates/base.html")),
+		"signup": template.Must(template.ParseFiles(
+			templatesDir+"signup.html",
+			templatesDir+"base.html",
+			templatesDir+"page-status.html",
+		)),
 	}
 }
