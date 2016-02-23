@@ -6,9 +6,9 @@ import (
 	"github.com/bnch/bancho/models"
 	"github.com/bnch/bancho/packethandler"
 	"github.com/jinzhu/gorm"
+	"log"
 	"net/http"
 	"os"
-	"log"
 )
 
 var db gorm.DB

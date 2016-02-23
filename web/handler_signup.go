@@ -78,10 +78,10 @@ func signupError(c *gin.Context, failMessage string) {
 			"Failure": failMessage,
 		},
 		"PostData": gin.H{
-			"Username": c.PostForm("username"),
-			"Password": c.PostForm("password"),
+			"Username":  c.PostForm("username"),
+			"Password":  c.PostForm("password"),
 			"Password2": c.PostForm("password2"),
-			"Email": c.PostForm("email"),
+			"Email":     c.PostForm("email"),
 		},
 	}, 200, c)
 }
