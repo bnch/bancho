@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"github.com/bnch/bancho/avatarserver"
+	"github.com/bnch/bancho/frontendserver"
 	"github.com/bnch/bancho/models"
 	"github.com/bnch/bancho/packethandler"
 	"github.com/jinzhu/gorm"
@@ -25,8 +26,7 @@ func Start(addrHTTP, addrHTTPS string) {
 		}
 	}
 
-	setUpTemplates()
-	frontendEngine = makeFrontend()
+	frontendEngine = frontendserver.Make()
 
 	var err error
 	err = avatarserver.SetUp()

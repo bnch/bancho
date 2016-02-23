@@ -1,4 +1,4 @@
-package web
+package frontendserver
 
 import (
 	"github.com/asaskevich/govalidator"
@@ -11,7 +11,7 @@ import (
 
 const usernameRegexString = "^[a-zA-Z0-9_\\[\\] -]{1,20}$"
 
-func signupHandler(c *gin.Context) {
+func signupPOST(c *gin.Context) {
 	user := c.PostForm("username")
 	pass := c.PostForm("password")
 	pass2 := c.PostForm("password2")

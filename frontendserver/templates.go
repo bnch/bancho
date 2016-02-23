@@ -1,4 +1,4 @@
-package web
+package frontendserver
 
 import (
 	"html/template"

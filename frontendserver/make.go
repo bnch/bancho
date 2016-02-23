@@ -1,10 +1,23 @@
-package web
+package frontendserver
 
 import (
+	"github.com/bnch/bancho/models"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
-func makeFrontend() *gin.Engine {
+var db gorm.DB
+
+// Make creates a gin engine able to respond properly to requests.
+func Make() *gin.Engine {
+	setUpTemplates()
+
+	var err error
+	db, err = models.CreateDB()
+	if err != nil {
+		panic(err)
+	}
+
 	c := gin.Default()
 
 	c.GET("/", func(c *gin.Context) {
@@ -17,7 +30,7 @@ func makeFrontend() *gin.Engine {
 			"Title": "Sign up",
 		}, 200, c)
 	})
-	c.POST("/signup", signupHandler)
+	c.POST("/signup", signupPOST)
 
 	c.GET("/web/bancho_connect.php", func(c *gin.Context) {
 		c.String(200, "us")
