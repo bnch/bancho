@@ -2,16 +2,16 @@
 package avatarserver
 
 import (
-    "net/http"
-	"strconv"
-	"os"
 	"fmt"
+	"net/http"
+	"os"
+	"strconv"
 )
 
 // Serve responds to an HTTP request with an avatar if present (responds with default avatar otherwise)
 func Serve(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%s a.ppy.sh%s\n", r.Method, r.URL.Path)
-    if len(r.URL.Path) < 1 {
+	if len(r.URL.Path) < 1 {
 		defaultAvatar(w, 403)
 		return
 	}
@@ -25,7 +25,7 @@ func Serve(w http.ResponseWriter, r *http.Request) {
 		defaultAvatar(w, 403)
 		return
 	}
-	http.ServeFile(w, r, "data/avatars/" + strconv.Itoa(picID) + ".png")
+	http.ServeFile(w, r, "data/avatars/"+strconv.Itoa(picID)+".png")
 }
 
 func defaultAvatar(w http.ResponseWriter, statusCode int) {

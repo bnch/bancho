@@ -3,8 +3,8 @@ package web
 import (
 	"compress/gzip"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/bnch/bancho/avatarserver"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
 )
