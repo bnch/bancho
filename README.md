@@ -26,13 +26,6 @@ in your terminal/command line and check that it's good. We're also assuming that
 you're developing on a UNIX environment, thus the command will be in shell.
 Despite that, commands should be fairly easy to port over to Windows.
 
-We're also gonna assume you have a webserver up and running on your computer,
-such as nginx or apache. Development without those will come in the near future.
-
-And, as a last thing, we're gonna assume you have a mysql server set up,
-listening to port 3306 on localhost, and having the user root with no password.
-This will change in the very near future.
-
 First step: clone the repo.
 
 ```sh
@@ -53,25 +46,18 @@ Second step: build executable.
 go build
 ```
 
-Third step: set up a reverse proxy on either nginx or apache. Just google
-"nginx reverse proxy" and you should easily get a sample configuration. It should
-proxy requests to c1.ppy.sh, c.ppy.sh, osu.ppy.sh and a.ppy.sh to 127.0.0.1:3000.
-
-Fourth step: change your hosts file to work on bancho. (note that on windows
-you'll need to write a line for each host, as you can't point multiple hostnames
-to an IP with a single line on windows' hosts file. blame microsoft.)
+Third step: change your hosts file to work on bancho.
 
 ```
-127.0.0.1 osu.ppy.sh a.ppy.sh c.ppy.sh c1.ppy.sh
+127.0.0.1 osu.ppy.sh
+127.0.0.1 a.ppy.sh
+127.0.0.1 c.ppy.sh
+127.0.0.1 c1.ppy.sh
 ```
 
-Fifth step: create your user!
-
-```
-./bancho mkuser 'username' 'password'
-```
-
-Sixth step: start server
+Fourth step: run the executable file (see below), modify the file
+that just appeared in that directory (bancho.ini), and then start
+the executable again.
 
 ```
 ./bancho
