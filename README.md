@@ -77,4 +77,5 @@ HTTPS), and if it works, high five yourself.
 
 ## cutting-edge build artifacts
 
-Still something WIP, but there you go: http://zxq.co:60291/view/bnch/bancho
+Don't want to install Go on your computer for installing bancho? You're in luck!
+We make binaries for each of our commits. http://zxq.co:60291/view/bnch/bancho
