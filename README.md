@@ -74,3 +74,7 @@ Fifth step: browse to http://osu.ppy.sh/signup, and sign up.
 
 Final step: open up osu! (should be fallback unless you have managed to set up
 HTTPS), and if it works, high five yourself.
+
+## cutting-edge build artifacts
+
+Still something WIP, but there you go: http://zxq.co:60291/view/bnch/bancho
