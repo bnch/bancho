@@ -76,7 +76,7 @@ const (
 	BanchoBeatmapInfoReply
 	OsuMatchTransferHost
 	BanchoLoginPermissions
-	BanchoFriendList
+	BanchoFriendList // []int32 - ALL FRIENDS, not just the ones online.
 	OsuFriendAdd
 	OsuFriendRemove
 	BanchoProtocolVersion
@@ -99,7 +99,7 @@ const (
 	BanchoBanInfo
 	OsuSpecialMatchInfoRequest
 	BanchoUserSilenced
-	BanchoUserPresenceSingle
+	BanchoUserPresenceSingle // int32 - Broadcasted each time an user comes online.
 	BanchoUserPresenceBundle
 	OsuUserPresenceRequest
 	OsuUserPresenceRequestAll

@@ -31,23 +31,27 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 		)
 		return guid, nil
 	}
-
+	
+	privileges := uint32(packets.PrivilegeSupporter)
+	if user.IsAdmin() || user.IsModerator() {
+		privileges = packets.PrivilegeGMTSupporter
+	}
+	
+	banchoUser := &Sessions[guid].User
+	banchoUser.Colour = user.GetColour()
+	banchoUser.Country = 108
+	banchoUser.UTCOffset = 24
+	banchoUser.ID = int32(user.ID)
+	banchoUser.Rank = 130
+	banchoUser.Username = user.Username
+	
 	Sessions[guid].Push(
 		packets.SilenceClient(0),
-		packets.UserID(int32(user.ID)),
+		packets.UserID(banchoUser.ID),
 		packets.ChoProtocol(protocolVersion),
-		packets.UserPrivileges(packets.PrivilegeGMTSupporter),
-		packets.FriendList([]int32{9001}),
-		packets.UserData(packets.UserDataInfo{
-			ID:         int32(user.ID),
-			PlayerName: user.Username,
-			UTCOffset:  25,
-			Country:    108,
-			Colour:     packets.ColourAdmin,
-			Longitude:  0,
-			Latitude:   0,
-			Rank:       1337,
-		}),
+		packets.UserPrivileges(privileges),
+		packets.FriendList(GetUserFriends(user.ID)),
+		packets.UserData(banchoUser.ToUserDataInfo()),
 		packets.UserDataFull(packets.UserDataFullInfo{
 			ID:         int32(user.ID),
 			Action:     common.StatusIdle,
@@ -60,20 +64,7 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 			Rank:       1337,
 			PP:         0, // 0 because not implemented
 		}),
-		packets.UserData(packets.UserDataInfo{
-			ID:         9001,
-			PlayerName: "Michele Satori",
-			UTCOffset:  25,
-			Country:    108,
-			Colour:     packets.ColourNormal,
-			Longitude:  0,
-			Latitude:   0,
-			Rank:       8,
-		}),
-		packets.OnlinePlayers([]int32{
-			int32(user.ID),
-			9001,
-		}),
+		packets.OnlinePlayers(GetUserIDs()),
 		packets.ChannelListingComplete(),
 		packets.ChannelJoin("#osu"),
 		packets.ChannelJoin("#announce"),
@@ -81,5 +72,8 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 		packets.ChannelTitle("#announce", "WELCOME TO THE DANK MEMES, PART 2", 1337),
 		packets.ChannelTitle("#puckfeppy", "Ayy Lmao", 1338),
 	)
+	
+	Broadcast(packets.UserPresence(int32(user.ID)), guid)
+	
 	return guid, nil
 }

@@ -22,7 +22,7 @@ func (s Session) Push(val ...packets.Packet) {
 }
 
 // NewSession generates a new session.
-func NewSession(u User) (Session, string) {
+func NewSession(u User) (*Session, string) {
 	var tok string
 	for {
 		tok = GenerateGUID()
@@ -32,7 +32,7 @@ func NewSession(u User) (Session, string) {
 		}
 	}
 	u.Token = tok
-	return Session{
+	return &Session{
 		stream:      new(packetCollection),
 		User:        u,
 		LastRequest: time.Now(),
@@ -40,4 +40,4 @@ func NewSession(u User) (Session, string) {
 }
 
 // Sessions is a map of connections to the server via the bancho protocol.
-var Sessions map[string]Session
+var Sessions map[string]*Session
