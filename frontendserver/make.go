@@ -1,15 +1,23 @@
 package frontendserver
 
 import (
+	"github.com/bnch/bancho/bindata"
 	"github.com/bnch/bancho/models"
+	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"os"
 )
 
 var db gorm.DB
+var frontendFolderExists bool
 
 // Make creates a gin engine able to respond properly to requests.
 func Make() *gin.Engine {
+	if finfo, err := os.Stat("frontend"); !os.IsNotExist(err) && finfo.IsDir() {
+		frontendFolderExists = true
+	}
+
 	setUpTemplates()
 
 	var err error
@@ -20,7 +28,16 @@ func Make() *gin.Engine {
 
 	c := gin.Default()
 
-	c.Static("/static", "frontend/static")
+	if frontendFolderExists {
+		c.Static("/static", "frontend/static")
+	} else {
+		c.StaticFS("/static", &assetfs.AssetFS{
+			Asset:     bindata.Asset,
+			AssetDir:  bindata.AssetDir,
+			AssetInfo: bindata.AssetInfo,
+			Prefix:    "frontend/static",
+		})
+	}
 
 	c.GET("/", indexGET)
 

@@ -3,10 +3,10 @@ package avatarserver
 
 import (
 	"fmt"
+	"github.com/bnch/hsfwsc"
 	"net/http"
 	"os"
 	"strconv"
-	"github.com/bnch/hsfwsc"
 )
 
 // Serve responds to an HTTP request with an avatar if present (responds with default avatar otherwise)

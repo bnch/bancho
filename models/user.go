@@ -22,7 +22,7 @@ type User struct {
 
 // IsBanned tells whether a user is banned.
 func (u User) IsBanned() bool {
-	if u.Permissions & PermissionBanned == 0 {
+	if u.Permissions&PermissionBanned == 0 {
 		return false
 	}
 	return true
@@ -30,7 +30,7 @@ func (u User) IsBanned() bool {
 
 // IsModerator tells whether a user is a moderator.
 func (u User) IsModerator() bool {
-	if u.Permissions & PermissionModerator == 0 {
+	if u.Permissions&PermissionModerator == 0 {
 		return false
 	}
 	return true
@@ -38,7 +38,7 @@ func (u User) IsModerator() bool {
 
 // IsAdmin tells whether a user is an admin.
 func (u User) IsAdmin() bool {
-	if u.Permissions & PermissionAdmin == 0 {
+	if u.Permissions&PermissionAdmin == 0 {
 		return false
 	}
 	return true
@@ -52,6 +52,6 @@ func (u User) GetColour() byte {
 	case u.IsAdmin():
 		return packets.ColourAdmin
 	default:
-		return packets.ColourSupporter		
+		return packets.ColourSupporter
 	}
 }

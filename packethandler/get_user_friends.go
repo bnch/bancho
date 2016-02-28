@@ -10,11 +10,11 @@ func GetUserFriends(userID int) []int32 {
 	db.Where(&models.UserFriendship{
 		Lover: userID,
 	}).Find(&lovers)
-	
+
 	var endArr []int32
 	for _, lover := range lovers {
 		endArr = append(endArr, int32(lover.Lover))
 	}
-	
+
 	return endArr
 }

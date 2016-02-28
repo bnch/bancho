@@ -31,12 +31,12 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 		)
 		return guid, nil
 	}
-	
+
 	privileges := uint32(packets.PrivilegeSupporter)
 	if user.IsAdmin() || user.IsModerator() {
 		privileges = packets.PrivilegeGMTSupporter
 	}
-	
+
 	banchoUser := &Sessions[guid].User
 	banchoUser.Colour = user.GetColour()
 	banchoUser.Country = 108
@@ -44,7 +44,7 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 	banchoUser.ID = int32(user.ID)
 	banchoUser.Rank = 130
 	banchoUser.Username = user.Username
-	
+
 	Sessions[guid].Push(
 		packets.SilenceClient(0),
 		packets.UserID(banchoUser.ID),
@@ -72,8 +72,8 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 		packets.ChannelTitle("#announce", "WELCOME TO THE DANK MEMES, PART 2", 1337),
 		packets.ChannelTitle("#puckfeppy", "Ayy Lmao", 1338),
 	)
-	
+
 	Broadcast(packets.UserPresence(int32(user.ID)), guid)
-	
+
 	return guid, nil
 }
