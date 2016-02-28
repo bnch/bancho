@@ -16,7 +16,7 @@ func GetPacket(i io.Reader) (b BasePacket, errF error) {
 	}
 
 	// Read a byte and give no fucks if it returns an error
-	_, _ = i.Read(make([]byte, 1))
+	i.Read(make([]byte, 1))
 
 	var contentLength uint32
 	err = binary.Read(i, binary.LittleEndian, &contentLength)

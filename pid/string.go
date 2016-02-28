@@ -117,9 +117,10 @@ var tostr = [...]string{
 	"OsuSpecialLeaveMatchChannel",
 }
 
-func String(packetID int) string {
-	if packetID > (len(tostr) - 1) {
-		return strconv.Itoa(packetID)
+// String converts a packetID to its constant name.
+func String(packetID uint16) string {
+	if packetID > uint16(len(tostr) - 1) {
+		return strconv.Itoa(int(packetID))
 	} 
 	return tostr[packetID]
 }
