@@ -5,7 +5,7 @@ import (
 )
 
 var tostr = [...]string{
-	"OsuSendUserState",              
+	"OsuSendUserState",
 	"OsuSendIRCMessage",
 	"OsuExit",
 	"OsuRequestStatusUpdate",
@@ -119,8 +119,8 @@ var tostr = [...]string{
 
 // String converts a packetID to its constant name.
 func String(packetID uint16) string {
-	if packetID > uint16(len(tostr) - 1) {
+	if packetID > uint16(len(tostr)-1) {
 		return strconv.Itoa(int(packetID))
-	} 
+	}
 	return tostr[packetID]
 }

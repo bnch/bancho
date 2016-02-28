@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"runtime"
 	"fmt"
 	"os"
+	"runtime"
 )
 
 // Braindead helps the poor little windows users that don't know what's

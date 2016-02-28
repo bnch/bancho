@@ -9,14 +9,14 @@ const (
 	OsuExit                              // osu closes
 	OsuRequestStatusUpdate               // update player stats
 	OsuPong                              // ping callback
-	BanchoLoginReply                     // login
+	BanchoLoginReply                     // int32 - user ID or fail ID
 	BanchoCommandError                   // reply to an error
-	BanchoSendMessage                    // i have no idea how is this handled
+	BanchoSendMessage                    // string (username), string (content), string (channel), int32 (userid) - Add a message to a channel
 	BanchoPing                           // ping request
 	BanchoHandleIRCUsernameChange        // someone changes name in irc
 	BanchoHandleIRCQuit                  // someone logged out
-	BanchoHandleUserUpdate               // someone else's stats updated
-	BanchoHandleUserQuit                 // user quit bancho entirely (not irc)
+	BanchoHandleUserUpdate               // packets.UserDataFullInfo - in-depth user info (rank, pp, level, score...)
+	BanchoHandleUserQuit                 // int32, byte? - user has quit (broadcasted to all users)
 	BanchoSpectatorJoined                // new spec
 	BanchoSpectatorLeft                  // spectator left
 	BanchoSpectateFrames                 // spectator frames chunks
@@ -68,15 +68,15 @@ const (
 	BanchoMatchSkip
 	BanchoUnauthorised
 	OsuChannelJoin
-	BanchoChannelJoinSuccess
-	BanchoChannelAvailable
+	BanchoChannelJoinSuccess // string - Tells the client they have been successfully subscribed to a channel.
+	BanchoChannelAvailable   // string, string, short - Channel name, description and current number of users.
 	BanchoChannelRevoked
 	BanchoChannelAvailableAutojoin
 	OsuBeatmapInfoRequest
 	BanchoBeatmapInfoReply
 	OsuMatchTransferHost
-	BanchoLoginPermissions
-	BanchoFriendList // []int32 - ALL FRIENDS, not just the ones online.
+	BanchoLoginPermissions // int32 - See packets.UserPrivileges constants
+	BanchoFriendList       // []int32 - ALL FRIENDS, not just the ones online.
 	OsuFriendAdd
 	OsuFriendRemove
 	BanchoProtocolVersion
@@ -87,20 +87,20 @@ const (
 	BanchoMonitor
 	BanchoMatchPlayerSkipped
 	OsuSetIrcAwayMessage
-	BanchoUserPresence
+	BanchoUserPresence // int32, string, byte, byte, byte, float, float, int - Basic user information
 	IRCOnly
 	OsuUserStatsRequest
 	BanchoRestart
 	OsuInvite
 	BanchoInvite
-	BanchoChannelListingComplete
+	BanchoChannelListingComplete // Null - Finished sending channel names.
 	OsuMatchChangePassword
 	BanchoMatchChangePassword
-	BanchoBanInfo
+	BanchoBanInfo // int32 - Number of seconds until the end of a silence.
 	OsuSpecialMatchInfoRequest
-	BanchoUserSilenced
+	BanchoUserSilenced       // int32 - Broadcasted when a user is silenced, so that their messages are deleted.
 	BanchoUserPresenceSingle // int32 - Broadcasted each time an user comes online.
-	BanchoUserPresenceBundle
+	BanchoUserPresenceBundle // []int32 - max size: 512. value in the array is user ID.
 	OsuUserPresenceRequest
 	OsuUserPresenceRequestAll
 	OsuUserToggleBlockNonFriendPM
