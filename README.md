@@ -20,36 +20,20 @@ This server is written with the help of:
 
 ## Setting up
 
-We're just gonna assume you have [Go](https://golang.org) installed on your
-computer, and have your goenv up and running. To make sure of that, run `go env`
-in your terminal/command line and check that it's good. We're also assuming that
-you're developing on a UNIX environment, thus the command will be in shell.
-Despite that, commands should be fairly easy to port over to Windows.
+For setting up bancho, the only things that we require you to have are a brain
+and MySQL. Nothing else must be installed. In the future we might as well
+implement SQLite, so that you won't even need mysql to get up and running.
 
-We're also gonna assume you have a MySQL database set up. Support for other databases
-may come in the future.
-
-First step: clone the repo.
-
-```sh
-cd $GOPATH
-# If you haven't forked
-mkdir -p src/github.com/bnch/bancho
-cd src/github.com/bnch/bancho
-git clone git@github.com:bnch/bancho.git .
-# If you have forked
-mkdir -p src/github.com/GITHUBUSERNAME/bancho
-cd src/github.com/GITHUBUSERNAME/bancho
-git clone git@github.com:GITHUBUSERNAME/bancho.git .
-```
-
-Second step: build executable.
-
-```sh
-go build
-```
-
-Third step: change your hosts file to work on bancho.
+1. Grab the latest [build artifact](http://zxq.co:60291/view/bnch/bancho), and
+   move the file to a folder where it's safe to break some stuff if required.
+2. Open up a command line and run the executable (with an eventual `chmod +x`).
+   If you're on windows it might as well work double clicking, but we're not
+   entirely sure our braindead system works.
+3. Edit bancho.ini with a text editor
+4. Run the executable again
+5. Add what's below in that big gray box with those 127.0.0.1 things to your
+   hosts file.
+6. Open up stable fallback and then... profit?
 
 ```
 127.0.0.1 osu.ppy.sh
@@ -58,24 +42,3 @@ Third step: change your hosts file to work on bancho.
 127.0.0.1 c1.ppy.sh
 ```
 
-Fourth step: run the executable file (see below), modify the file
-that just appeared in that directory (bancho.ini), and then start
-the executable again. 
-
-Note on the config file: if you do not have nginx or apache or whatever
-listening on port 80, just set HTTP's port to 80 for making bancho work
-right out of the box.
-
-```
-./bancho
-```
-
-Fifth step: browse to http://osu.ppy.sh/signup, and sign up.
-
-Final step: open up osu! (should be fallback unless you have managed to set up
-HTTPS), and if it works, high five yourself.
-
-## cutting-edge build artifacts
-
-Don't want to install Go on your computer for installing bancho? You're in luck!
-We make binaries for each of our commits. http://zxq.co:60291/view/bnch/bancho

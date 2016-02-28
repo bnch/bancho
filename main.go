@@ -17,5 +17,6 @@ func main() {
 			Action: cmd.MkUser,
 		},
 	}
+	defer cmd.Braindead()
 	app.Run(os.Args)
 }
