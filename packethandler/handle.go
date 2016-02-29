@@ -6,20 +6,12 @@ import (
 	"github.com/bnch/bancho/inbound"
 	"github.com/bnch/bancho/packethandler/logindata"
 	"io"
-)
-
-// Request types
-const (
-	TypeLogin = iota
-	TypePoll
-	TypeChatMessage
-	// more to go...
+	"github.com/bnch/banchoreader/lib"
+	"os"
 )
 
 // Handle takes an input and writes data to an output. Not very hard.
 func Handle(input []byte, output *[]byte, token string) (string, error) {
-	var requestType int
-
 	sendBackToken := false
 
 	defer func() {
@@ -32,7 +24,6 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 
 	// The user wants to login
 	if token == "" {
-		requestType = TypeLogin
 		sendBackToken = true
 		d, err := logindata.Unmarshal(input)
 		if err != nil {
@@ -53,7 +44,9 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 			if !pack.Initialised {
 				break
 			}
-			fmt.Printf("Inbound packet: %d - %d - % x - %s\n", requestType, pack.ID, input, string(pack.Content))
+			r := banchoreader.New()
+			r.Colored = true
+			r.DumpPacket(os.Stdout, pack)
 		}
 	}
 

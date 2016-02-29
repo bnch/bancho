@@ -4,11 +4,11 @@ package pid
 // These are all the commands us humans are currently aware of.
 // (as a general rule: packet ID = line number - 7)
 const (
-	OsuSendUserState              = iota // update osu about the user state
-	OsuSendIRCMessage                    // receive message from IRC
-	OsuExit                              // osu closes
-	OsuRequestStatusUpdate               // update player stats
-	OsuPong                              // ping callback
+	OsuSendUserState              = iota // byte (actionID), string (map name), string (map md5), int32 (mods), byte (mode), int32 (beatmap /b/ ID) - update osu about the user state
+	OsuSendIRCMessage                    // emptystring, string (content), string (channel), emptyint32 - receive message from in-game chat
+	OsuExit                              // emptyint32 - osu closes
+	OsuRequestStatusUpdate               // Null - update player stats
+	OsuPong                              // Null - ping callback
 	BanchoLoginReply                     // int32 - user ID or fail ID
 	BanchoCommandError                   // reply to an error
 	BanchoSendMessage                    // string (username), string (content), string (channel), int32 (userid) - Add a message to a channel
@@ -33,8 +33,8 @@ const (
 	BanchoMatchUpdate                    // update match details
 	BanchoMatchNew                       // new match
 	BanchoMatchDisband                   // close room
-	OsuLobbyPart                         // client left lobby
-	OsuLobbyJoin                         // client joined lobby
+	OsuLobbyPart                         // Null - client left lobby
+	OsuLobbyJoin                         // Null - client joined lobby
 	OsuMatchCreate                       // client created a new lobby
 	OsuMatchJoin                         // sends a request to bancho (join lobby)
 	OsuLobbySomething                    // i can't figure out this
@@ -67,29 +67,29 @@ const (
 	OsuMatchSkipRequest
 	BanchoMatchSkip
 	BanchoUnauthorised
-	OsuChannelJoin
+	OsuChannelJoin // string - not hard to guess what it is and what it sends
 	BanchoChannelJoinSuccess // string - Tells the client they have been successfully subscribed to a channel.
 	BanchoChannelAvailable   // string, string, short - Channel name, description and current number of users.
 	BanchoChannelRevoked
 	BanchoChannelAvailableAutojoin
-	OsuBeatmapInfoRequest
+	OsuBeatmapInfoRequest // []string? Looks like array length (uint32 this time) and then lotsa strings. Requests info about beatmaps, requiring a subsequent response with BanchoBeatmapInfoReply I suppose.
 	BanchoBeatmapInfoReply
 	OsuMatchTransferHost
 	BanchoLoginPermissions // int32 - See packets.UserPrivileges constants
 	BanchoFriendList       // []int32 - ALL FRIENDS, not just the ones online.
-	OsuFriendAdd
-	OsuFriendRemove
-	BanchoProtocolVersion
+	OsuFriendAdd // int32 - user id with the friend to add
+	OsuFriendRemove // int32 - user id with the friend to delete
+	BanchoProtocolVersion // int32 - bancho protocol version (always 19 for the moment)
 	BanchoTitleUpdate
 	OsuMatchChangeTeam
-	OsuChannelLeave
-	OsuReceiveUpdates
+	OsuChannelLeave // string - channel to part
+	OsuReceiveUpdates // emptyint32 - ?
 	BanchoMonitor
 	BanchoMatchPlayerSkipped
 	OsuSetIrcAwayMessage
 	BanchoUserPresence // int32, string, byte, byte, byte, float, float, int - Basic user information
 	IRCOnly
-	OsuUserStatsRequest
+	OsuUserStatsRequest // short, int32 (userid) - request to have a single BanchoHandleUserUpdate about an user. No idea what the first short is for.
 	BanchoRestart
 	OsuInvite
 	BanchoInvite

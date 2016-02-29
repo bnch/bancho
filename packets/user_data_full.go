@@ -18,6 +18,7 @@ type UserDataFullInfo struct {
 	// Nobody knows the fuck this is.
 	// ripple bancho v1 says this should be "\x00\x00\x00\x01", although justm3's
 	// custom-bancho says it should be just 0 (so "\x00\x00\x00\x00").
+	// Beatmap /b/ ID?
 	UnknownInt int32
 	Score      uint64
 	// Accuracy is divided by 100 when sent to osu!. This is because 0.1337 = 13.37% on the osu! client.
