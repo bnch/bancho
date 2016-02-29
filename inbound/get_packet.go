@@ -45,7 +45,7 @@ func checkErr(e error) byte {
 	if e == nil {
 		return 0
 	}
-	if e == io.ErrUnexpectedEOF {
+	if e == io.EOF {
 		return 1
 	}
 	return 2
