@@ -14,4 +14,7 @@ var migrations = map[uint64]func(gorm.DB){
 		// (any attempt to message them will result in a browser opening http://osu.ppy.sh/p/doyoureallywanttoaskpeppy)
 		db.Exec("ALTER TABLE users AUTO_INCREMENT=3;")
 	},
+	1456756895: func(db gorm.DB) {
+		db.CreateTable(&UserFriendship{})
+	},
 }
