@@ -22,7 +22,7 @@ type User struct {
 	Status   common.Status
 }
 
-// ToUserDataINfo converts a packethandler.User to a packets.UserDataInfo.
+// ToUserDataInfo converts a packethandler.User to a packets.UserDataInfo.
 func (u User) ToUserDataInfo() packets.UserDataInfo {
 	return packets.UserDataInfo{
 		ID:         u.ID,

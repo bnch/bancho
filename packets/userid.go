@@ -10,7 +10,7 @@ const (
 	LoginNeedUpdate = -2
 	// Locks the client
 	LoginBanned = -4
-	// LoginError is to be used in case of maintainance
+	// LoginError is to be used in case of maintenance
 	LoginError         = -5
 	LoginNeedSupporter = -6
 )
