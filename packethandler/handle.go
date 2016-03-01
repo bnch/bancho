@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/bnch/bancho/inbound"
 	"github.com/bnch/bancho/packethandler/logindata"
-	"io"
 	"github.com/bnch/banchoreader/lib"
+	"io"
 	"os"
 )
 

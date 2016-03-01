@@ -2,8 +2,8 @@ package inbound
 
 import (
 	"encoding/binary"
-	"io"
 	"fmt"
+	"io"
 )
 
 // MaximumContentLength is the maximum length an inbound bancho packet can have (set for sanity). 1024 * 1024 * 10 (10 MB)
@@ -43,7 +43,7 @@ func GetPacket(i io.Reader) (b BasePacket, errF error) {
 		errF = err
 		return
 	}
-	
+
 	if uint32(read) != contentLength {
 		errF = fmt.Errorf("bancho protocol violation: expected to read %d bytes, actually read %d (invalid content length)", contentLength, read)
 	}

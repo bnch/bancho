@@ -67,7 +67,7 @@ const (
 	OsuMatchSkipRequest
 	BanchoMatchSkip
 	BanchoUnauthorised
-	OsuChannelJoin // string - not hard to guess what it is and what it sends
+	OsuChannelJoin           // string - not hard to guess what it is and what it sends
 	BanchoChannelJoinSuccess // string - Tells the client they have been successfully subscribed to a channel.
 	BanchoChannelAvailable   // string, string, short - Channel name, description and current number of users.
 	BanchoChannelRevoked
@@ -77,17 +77,17 @@ const (
 	OsuMatchTransferHost
 	BanchoLoginPermissions // int32 - See packets.UserPrivileges constants
 	BanchoFriendList       // []int32 - ALL FRIENDS, not just the ones online.
-	OsuFriendAdd // int32 - user id with the friend to add
-	OsuFriendRemove // int32 - user id with the friend to delete
-	BanchoProtocolVersion // int32 - bancho protocol version (always 19 for the moment)
+	OsuFriendAdd           // int32 - user id with the friend to add
+	OsuFriendRemove        // int32 - user id with the friend to delete
+	BanchoProtocolVersion  // int32 - bancho protocol version (always 19 for the moment)
 	BanchoTitleUpdate
 	OsuMatchChangeTeam
-	OsuChannelLeave // string - channel to part
+	OsuChannelLeave   // string - channel to part
 	OsuReceiveUpdates // emptyint32 - ?
 	BanchoMonitor
 	BanchoMatchPlayerSkipped
-	OsuSetIrcAwayMessage
-	BanchoUserPresence // int32, string, byte, byte, byte, float, float, int - Basic user information
+	OsuSetIrcAwayMessage // This packet has too many memes. Will implement later on.
+	BanchoUserPresence   // int32, string, byte, byte, byte, float, float, int - Basic user information
 	IRCOnly
 	OsuUserStatsRequest // short, int32 (userid) - request to have a single BanchoHandleUserUpdate about an user. No idea what the first short is for.
 	BanchoRestart
