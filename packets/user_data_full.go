@@ -15,12 +15,8 @@ type UserDataFullInfo struct {
 	ActionMapMD5 string
 	Mods         int32
 	GameMode     byte
-	// Nobody knows the fuck this is.
-	// ripple bancho v1 says this should be "\x00\x00\x00\x01", although justm3's
-	// custom-bancho says it should be just 0 (so "\x00\x00\x00\x00").
-	// Beatmap /b/ ID?
-	UnknownInt int32
-	Score      uint64
+	BeatmapID    int32
+	Score        uint64
 	// Accuracy is divided by 100 when sent to osu!. This is because 0.1337 = 13.37% on the osu! client.
 	Accuracy  float32
 	Playcount uint32
@@ -39,7 +35,7 @@ func UserDataFull(u UserDataFullInfo) Packet {
 	binary.Write(b, binary.LittleEndian, append(BanchoString(u.ActionText), BanchoString(u.ActionMapMD5)...))
 	binary.Write(b, binary.LittleEndian, u.Mods)
 	binary.Write(b, binary.LittleEndian, u.GameMode)
-	binary.Write(b, binary.LittleEndian, u.UnknownInt)
+	binary.Write(b, binary.LittleEndian, u.BeatmapID)
 	binary.Write(b, binary.LittleEndian, u.Score)
 	binary.Write(b, binary.LittleEndian, u.Accuracy/100)
 	binary.Write(b, binary.LittleEndian, u.Playcount)

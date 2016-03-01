@@ -10,7 +10,7 @@ import (
 const protocolVersion = 19
 
 // Login logs the user into bancho. Returns the osu! token and any eventual error.
-func Login(l logindata.LoginData, output *[]byte) (string, error) {
+func Login(l logindata.LoginData, output *[]byte) (string, bool, error) {
 	sess, guid := NewSession(User{})
 	Sessions[guid] = sess
 
@@ -23,13 +23,13 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 		Sessions[guid].Push(
 			packets.UserID(packets.LoginFailed),
 		)
-		return guid, nil
+		return guid, true, nil
 	}
 	if (user.Permissions & models.PermissionBanned) != 0 {
 		Sessions[guid].Push(
 			packets.UserID(packets.LoginBanned),
 		)
-		return guid, nil
+		return guid, true, nil
 	}
 
 	privileges := uint32(packets.PrivilegeSupporter)
@@ -75,5 +75,5 @@ func Login(l logindata.LoginData, output *[]byte) (string, error) {
 
 	Broadcast(packets.UserPresence(int32(user.ID)), guid)
 
-	return guid, nil
+	return guid, false, nil
 }
