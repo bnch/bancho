@@ -65,15 +65,19 @@ func Login(l logindata.LoginData, output *[]byte) (string, bool, error) {
 			PP:         0, // 0 because not implemented
 		}),
 		packets.OnlinePlayers(GetUserIDs()),
-		packets.ChannelListingComplete(),
 		packets.ChannelJoin("#osu"),
 		packets.ChannelJoin("#announce"),
 		packets.ChannelTitle("#osu", "WELCOME TO THE DANK MEMES", 2),
 		packets.ChannelTitle("#announce", "WELCOME TO THE DANK MEMES, PART 2", 1337),
-		packets.ChannelTitle("#puckfeppy", "Ayy Lmao", 1338),
+		packets.ChannelListingComplete(),
 	)
 
-	Broadcast(packets.UserPresence(int32(user.ID)), guid)
+	s := GetStream("all")
+	s.Subscribe(guid)
+	s.Send(packets.UserPresence(int32(user.ID)))
+
+	GetStream("chan/#osu").Subscribe(guid)
+	GetStream("chan/#announce").Subscribe(guid)
 
 	return guid, false, nil
 }

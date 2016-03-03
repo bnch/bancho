@@ -3,13 +3,15 @@ package packethandler
 import (
 	"bytes"
 	"fmt"
-	"github.com/bnch/bancho/inbound"
-	"github.com/bnch/bancho/packethandler/logindata"
-	"github.com/bnch/banchoreader/lib"
 	"io"
 	"os"
+	"runtime/debug"
 	"time"
+
+	"github.com/bnch/bancho/inbound"
+	"github.com/bnch/bancho/packethandler/logindata"
 	"github.com/bnch/bancho/packets"
+	"github.com/bnch/banchoreader/lib"
 )
 
 // Handle takes an input and writes data to an output. Not very hard.
@@ -22,6 +24,7 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 		if c != nil {
 			fmt.Println("ERROR!!!!!!!11!")
 			fmt.Println(c)
+			fmt.Println(string(debug.Stack()))
 		}
 	}()
 
@@ -37,17 +40,17 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 			return token, err
 		}
 	} else if Sessions[token] == nil || Sessions[token].User.ID == 0 {
-			sendBackToken = true
-			deleteAfterwards = true
-			token = GenerateGUID()
-			Sessions[token] = &Session{
-				LastRequest: time.Now(),
-				stream: &packetCollection{},
-			}
-			Sessions[token].Push(
-				packets.OrangeNotification("Your session expired. Nothing to worry about - just log in again!"),
-				packets.UserID(-1),
-			)
+		sendBackToken = true
+		deleteAfterwards = true
+		token = GenerateGUID()
+		Sessions[token] = &Session{
+			LastRequest: time.Now(),
+			stream:      &packetCollection{},
+		}
+		Sessions[token].Push(
+			packets.OrangeNotification("Your session expired. Nothing to worry about - just log in again!"),
+			packets.UserID(-1),
+		)
 	} else {
 		inputReader := bytes.NewReader(input)
 		for {
@@ -62,7 +65,7 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 			r := banchoreader.New()
 			r.Colored = true
 			r.DumpPacket(os.Stdout, pack)
-			RawPacketHandler(pack, Sessions[token])
+			deleteAfterwards = RawPacketHandler(pack, Sessions[token])
 		}
 	}
 
@@ -72,12 +75,16 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 		if packet == nil {
 			break
 		}
+		for _, v := range packet.Ignored {
+			if v == token {
+				continue
+			}
+		}
 		*output = append(*output, packet.Content...)
 	}
 	fmt.Printf("% x\n", *output)
-	
+
 	if deleteAfterwards {
-		fmt.Println("deletingggggg")
 		delete(Sessions, token)
 	}
 

@@ -1,9 +1,10 @@
 package packethandler
 
 import (
+	"time"
+
 	"github.com/bnch/bancho/inbound"
 	"github.com/bnch/bancho/pid"
-	"time"
 )
 
 // RawPacketHandler handles inbound packets, and sends them to be analysed by functions.
@@ -29,6 +30,7 @@ func RawPacketHandler(pack inbound.BasePacket, s *Session) (delAfter bool) {
 	case pid.OsuChannelJoin:
 		// Just a string containing the channel name to join.
 	case pid.OsuExit:
+		UserQuit(s)
 		delAfter = true
 	}
 	return

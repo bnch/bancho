@@ -4,7 +4,9 @@ package packethandler
 func GetUserIDs() []int32 {
 	var users []int32
 	for _, sess := range Sessions {
-		users = append(users, sess.User.ID)
+		if sess != nil && sess.User.ID != 0 {
+			users = append(users, sess.User.ID)
+		}
 	}
 	return users
 }
