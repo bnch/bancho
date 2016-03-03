@@ -17,16 +17,15 @@ type User struct {
 		Longitude float32
 		Latitude  float32
 	}
-	Rank     int
-	Username string
-	Status   common.Status
+	Rank   int
+	Status common.Status
 }
 
 // ToUserDataInfo converts a packethandler.User to a packets.UserDataInfo.
 func (u User) ToUserDataInfo() packets.UserDataInfo {
 	return packets.UserDataInfo{
 		ID:         u.ID,
-		PlayerName: u.Username,
+		PlayerName: u.Name,
 		UTCOffset:  u.UTCOffset,
 		Country:    u.Country,
 		Colour:     u.Colour,

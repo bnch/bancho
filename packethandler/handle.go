@@ -75,11 +75,18 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 		if packet == nil {
 			break
 		}
+
+		var b bool
 		for _, v := range packet.Ignored {
 			if v == token {
-				continue
+				b = true
+				break
 			}
 		}
+		if b {
+			break
+		}
+
 		*output = append(*output, packet.Content...)
 	}
 	fmt.Printf("% x\n", *output)

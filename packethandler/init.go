@@ -18,6 +18,4 @@ func SetUp() {
 	}
 	go Prune()
 	NewStream("all")
-	NewStream("chan/#osu")
-	NewStream("chan/#announce")
 }

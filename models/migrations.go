@@ -17,4 +17,15 @@ var migrations = map[uint64]func(gorm.DB){
 	1456756895: func(db gorm.DB) {
 		db.CreateTable(&UserFriendship{})
 	},
+	1457036659: func(db gorm.DB) {
+		db.CreateTable(&Channel{})
+		db.Create(&Channel{
+			Name:        "#osu",
+			Description: "Main channel for discussion about anything and everything.",
+		})
+		db.Create(&Channel{
+			Name:        "#announce",
+			Description: "The channnel where the announcements should appear. Not really.",
+		})
+	},
 }

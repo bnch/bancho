@@ -23,10 +23,7 @@ func RawPacketHandler(pack inbound.BasePacket, s *Session) (delAfter bool) {
 		*/
 		pack.Unmarshal(&s.User.Status.Status, &s.User.Status.Text, &s.User.Status.MapMD5)
 	case pid.OsuSendIRCMessage:
-		/* E.G.:
-		* 01 00 00 16 00 00 00 0b 00 0b 08 64 69 6f 20 63 6e 61 65 0b 04 23 6f 73 75 00 00 00 00
-		* ^____________ header
-		 */
+		HandleMessage(pack, s)
 	case pid.OsuChannelJoin:
 		// Just a string containing the channel name to join.
 	case pid.OsuExit:

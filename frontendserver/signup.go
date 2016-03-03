@@ -1,12 +1,13 @@
 package frontendserver
 
 import (
+	"regexp"
+	"strings"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/bnch/bancho/common"
 	"github.com/bnch/bancho/models"
 	"github.com/gin-gonic/gin"
-	"regexp"
-	"strings"
 )
 
 const usernameRegexString = "^[a-zA-Z0-9_\\[\\] -]{1,20}$"
@@ -46,7 +47,7 @@ func signupPOST(c *gin.Context) {
 
 	// 5. Check for an user with the same username
 	u := models.User{}
-	db.Where("username = ? or email = ?", user, pass).First(&u)
+	db.Where("username = ? or email = ?", user, email).First(&u)
 	if !db.NewRecord(u) {
 		var samething string
 		if strings.ToLower(user) == strings.ToLower(u.Username) {

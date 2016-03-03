@@ -43,7 +43,7 @@ func Login(l logindata.LoginData, output *[]byte) (string, bool, error) {
 	banchoUser.UTCOffset = 24
 	banchoUser.ID = int32(user.ID)
 	banchoUser.Rank = 130
-	banchoUser.Username = user.Username
+	banchoUser.Name = user.Username
 
 	Sessions[guid].Push(
 		packets.SilenceClient(0),
@@ -69,8 +69,27 @@ func Login(l logindata.LoginData, output *[]byte) (string, bool, error) {
 		packets.ChannelJoin("#announce"),
 		packets.ChannelTitle("#osu", "WELCOME TO THE DANK MEMES", 2),
 		packets.ChannelTitle("#announce", "WELCOME TO THE DANK MEMES, PART 2", 1337),
-		packets.ChannelListingComplete(),
 	)
+
+	var chans []models.Channel
+	db.Find(&chans)
+	for _, c := range chans {
+		st := GetStream("chan/" + c.Name)
+		if st == nil {
+			st = NewStream("chan/" + c.Name)
+		}
+		subs := len(st.Subscribers())
+		var subsUint uint16
+		if subs > 65535 {
+			subsUint = 9001
+		} else {
+			subsUint = uint16(subs)
+		}
+		Sessions[guid].Push(
+			packets.ChannelTitle(c.Name, c.Description, subsUint),
+		)
+	}
+	Sessions[guid].Push(packets.ChannelListingComplete())
 
 	s := GetStream("all")
 	s.Subscribe(guid)
