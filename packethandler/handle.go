@@ -15,7 +15,7 @@ import (
 )
 
 // Handle takes an input and writes data to an output. Not very hard.
-func Handle(input []byte, output *[]byte, token string) (string, error) {
+func Handle(input []byte, output io.Writer, token string) (string, error) {
 	var sendBackToken bool
 	var deleteAfterwards bool
 
@@ -35,7 +35,7 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		token, deleteAfterwards, err = Login(d, output)
+		token, deleteAfterwards, err = Login(d)
 		if err != nil {
 			return token, err
 		}
@@ -45,7 +45,7 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 		token = GenerateGUID()
 		Sessions[token] = &Session{
 			LastRequest: time.Now(),
-			stream:      &packetCollection{},
+			stream:      new(bytes.Buffer),
 		}
 		Sessions[token].Push(
 			packets.OrangeNotification("Your session expired. Nothing to worry about - just log in again!"),
@@ -70,26 +70,7 @@ func Handle(input []byte, output *[]byte, token string) (string, error) {
 	}
 
 	// Make up response, putting together all the accumulated packets.
-	for {
-		packet := Sessions[token].stream.Pop()
-		if packet == nil {
-			break
-		}
-
-		var b bool
-		for _, v := range packet.Ignored {
-			if v == token {
-				b = true
-				break
-			}
-		}
-		if b {
-			break
-		}
-
-		*output = append(*output, packet.Content...)
-	}
-	fmt.Printf("% x\n", *output)
+	io.Copy(output, Sessions[token].stream)
 
 	if deleteAfterwards {
 		delete(Sessions, token)

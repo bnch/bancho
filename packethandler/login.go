@@ -10,7 +10,7 @@ import (
 const protocolVersion = 19
 
 // Login logs the user into bancho. Returns the osu! token and any eventual error.
-func Login(l logindata.LoginData, output *[]byte) (string, bool, error) {
+func Login(l logindata.LoginData) (string, bool, error) {
 	sess, guid := NewSession(User{})
 	Sessions[guid] = sess
 

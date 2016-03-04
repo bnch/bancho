@@ -1,11 +1,14 @@
 package web
 
 import (
+	"bytes"
 	"fmt"
-	"github.com/bnch/bancho/packethandler"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+
+	"github.com/bnch/bancho/packethandler"
 )
 
 // BanchoConnectionHandler takes inbound connections to the bancho server (c.ppy.sh) and makes a sensed response.
@@ -33,8 +36,8 @@ func BanchoConnectionHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Vary", "Accept-Encoding")
 
 	// Handle the packet
-	var output []byte
-	newToken, err := packethandler.Handle(data, &output, r.Header.Get("osu-token"))
+	buf := new(bytes.Buffer)
+	newToken, err := packethandler.Handle(data, buf, r.Header.Get("osu-token"))
 	if err != nil {
 		fmt.Println("Error in bancho:", err)
 	}
@@ -43,5 +46,5 @@ func BanchoConnectionHandler(w http.ResponseWriter, r *http.Request) {
 	if newToken != "" {
 		w.Header()["cho-token"] = []string{newToken}
 	}
-	w.Write(output)
+	io.Copy(w, buf)
 }
