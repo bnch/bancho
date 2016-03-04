@@ -7,12 +7,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/bnch/bancho/packethandler"
 )
 
 // BanchoConnectionHandler takes inbound connections to the bancho server (c.ppy.sh) and makes a sensed response.
 func BanchoConnectionHandler(w http.ResponseWriter, r *http.Request) {
+	begin := time.Now()
 	w.Header().Add("Content-Type", "text/html; charset=utf-8")
 
 	// In case we're not doing a request from the osu! client, display the "frontend".
@@ -22,7 +24,7 @@ func BanchoConnectionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Log that we got a request.
-	fmt.Printf("==> REQUEST (token: \"%s\")\n", r.Header.Get("osu-token"))
+	fmt.Printf("> Request (%s)\n", r.Header.Get("osu-token"))
 
 	// Get data from request body
 	data, err := ioutil.ReadAll(r.Body)
@@ -47,4 +49,5 @@ func BanchoConnectionHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header()["cho-token"] = []string{newToken}
 	}
 	io.Copy(w, buf)
+	fmt.Printf("> Request end - time took: %s\n", time.Since(begin).String())
 }
