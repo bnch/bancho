@@ -2,9 +2,10 @@ package models
 
 import (
 	"fmt"
+	"sort"
+
 	"github.com/bnch/bancho/conf"
 	"github.com/jinzhu/gorm"
-	"sort"
 	// Hello golint pls dont break balls kthx bye
 	_ "github.com/Go-SQL-Driver/MySQL"
 )

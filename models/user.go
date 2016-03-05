@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/bnch/bancho/packets"
+	"github.com/jinzhu/gorm"
 )
 
 // User Permissions
@@ -54,4 +55,11 @@ func (u User) GetColour() byte {
 	default:
 		return packets.ColourSupporter
 	}
+}
+
+// RelatedUserStats finds the UserStats of an user.
+func (u User) RelatedUserStats(db gorm.DB) UserStats {
+	user := UserStats{}
+	db.First(&user, u.ID)
+	return user
 }

@@ -28,4 +28,18 @@ var migrations = map[uint64]func(gorm.DB){
 			Description: "The channnel where the announcements should appear. Not really.",
 		})
 	},
+	1457125054: func(db gorm.DB) {
+		db.CreateTable(&UserStats{})
+		users := []User{}
+		db.Find(&users)
+		for _, u := range users {
+			db.Create(&UserStats{
+				ID: u.ID,
+			})
+		}
+	},
+	1457180378: func(db gorm.DB) {
+		db.CreateTable(&Leaderboard{})
+		BuildLeaderboard(db)
+	},
 }
