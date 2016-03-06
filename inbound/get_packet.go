@@ -6,8 +6,8 @@ import (
 	"io"
 )
 
-// MaximumContentLength is the maximum length an inbound bancho packet can have (set for sanity). 1024 * 1024 * 10 (10 MB)
-const MaximumContentLength = 10485760
+// MaximumContentLength is the maximum length an inbound bancho packet can have (set for sanity).
+const MaximumContentLength = 1024 * 1024 * 10
 
 // GetPacket returns an bancho packet.
 func GetPacket(i io.Reader) (b BasePacket, errF error) {
