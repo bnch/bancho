@@ -60,11 +60,22 @@ func signupPOST(c *gin.Context) {
 	}
 
 	pass = common.CryptPass(pass)
-	db.Create(&models.User{
+	dbUser := models.User{
 		Username:    user,
 		Password:    pass,
 		Permissions: models.PermissionAdmin,
-	})
+	}
+	db.Create(&dbUser)
+	go func() {
+		dbUserStats := models.UserStats{
+			ID: dbUser.ID,
+		}
+		db.Create(&dbUserStats)
+		dbUserStats.UpdateLeaderboard(0, db)
+		dbUserStats.UpdateLeaderboard(1, db)
+		dbUserStats.UpdateLeaderboard(2, db)
+		dbUserStats.UpdateLeaderboard(3, db)
+	}()
 	serveTemplate("signup", gin.H{
 		"Title": "Sign up",
 		"Status": gin.H{

@@ -35,11 +35,25 @@ func (u UserStats) UpdateLeaderboard(mode byte, db gorm.DB) error {
 	db.First(&self, u.ID)
 	if db.NewRecord(self) {
 		isNew = true
+		self.ID = u.ID
+	} else if self.choose(mode) == 0 {
+		isNew = true
 	}
-	self.ID = u.ID
+
+	var val uint64
+	switch mode {
+	case 0:
+		val = u.RankedScoreSTD
+	case 1:
+		val = u.RankedScoreTaiko
+	case 2:
+		val = u.RankedScoreCTB
+	case 3:
+		val = u.RankedScoreMania
+	}
 
 	target := UserStats{}
-	db.Where("ranked_score_" + dbmode + " <= ?").Order("ranked_score_" + dbmode + " desc").First(&target)
+	db.Where("ranked_score_"+dbmode+" <= ?", val).Order("ranked_score_" + dbmode + " desc").First(&target)
 
 	var targetPos uint32
 	if db.NewRecord(target) {
@@ -60,12 +74,12 @@ func (u UserStats) UpdateLeaderboard(mode byte, db gorm.DB) error {
 
 	// BEGIN HELL CODE
 	tx := db.Begin()
+	tx.Delete(&Leaderboard{
+		ID: u.ID,
+	})
 	if isNew {
 		tx.Exec("update leaderboards set "+dbmode+" = "+dbmode+" + 1 where "+dbmode+" >= ? order by "+dbmode+" desc", targetPos)
 	} else {
-		tx.Delete(&Leaderboard{
-			ID: u.ID,
-		})
 		tx.Exec("update leaderboards set "+dbmode+" = "+dbmode+" + 1 where "+dbmode+" >= ? and "+dbmode+" < ? order by "+dbmode+" desc", self.choose(mode), targetPos)
 	}
 
