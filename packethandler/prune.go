@@ -10,6 +10,7 @@ const sessionTimeout time.Duration = time.Second * 150
 func Prune() {
 	for k, v := range Sessions {
 		if time.Since(v.LastRequest) > sessionTimeout {
+			UserQuit(v)
 			delete(Sessions, k)
 		}
 	}
