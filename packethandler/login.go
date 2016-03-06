@@ -74,10 +74,7 @@ func Login(l logindata.LoginData) (string, bool, error) {
 	var chans []models.Channel
 	db.Find(&chans)
 	for _, c := range chans {
-		st := GetStream("chan/" + c.Name)
-		if st == nil {
-			st = NewStream("chan/" + c.Name)
-		}
+		st := GetInitialisedStream("chan/" + c.Name)
 		subs := len(st.Subscribers())
 		var subsUint uint16
 		if subs > 65535 {

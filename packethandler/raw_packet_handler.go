@@ -25,7 +25,7 @@ func RawPacketHandler(pack inbound.BasePacket, s *Session) (delAfter bool) {
 	case pid.OsuSendIRCMessage:
 		HandleMessage(pack, s)
 	case pid.OsuChannelJoin:
-		// Just a string containing the channel name to join.
+		HandleChannelJoin(pack, s)
 	case pid.OsuExit:
 		UserQuit(s)
 		delAfter = true

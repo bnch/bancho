@@ -15,9 +15,14 @@ type ChatMessage struct {
 
 // ToPacket converts a ChatMessage to a packets.Packet.
 func (c ChatMessage) ToPacket(s *Session) packets.Packet {
-	pack := packets.ChatMessage(c.From, c.To, c.Content, c.UserID)
+	pack := c.ToPacketNoIgnore()
 	pack.Ignored = append(pack.Ignored, s.User.Token)
 	return pack
+}
+
+// ToPacketNoIgnore returns a chat message without the ignored sender. Used for PMs.
+func (c ChatMessage) ToPacketNoIgnore() packets.Packet {
+	return packets.ChatMessage(c.From, c.To, c.Content, c.UserID)
 }
 
 // HandleMessage broadcasts a received message to all users.

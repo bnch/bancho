@@ -36,6 +36,16 @@ func GetStream(name string) *Stream {
 	return nil
 }
 
+// GetInitialisedStream returns a valid stream in all cases.
+// If there's no stream with such name, it creates it.
+func GetInitialisedStream(name string) *Stream {
+	s := GetStream(name)
+	if s == nil {
+		s = NewStream(name)
+	}
+	return s
+}
+
 // Delete erases the stream.
 func (s *Stream) Delete() {
 	close(s.channel)
@@ -56,6 +66,16 @@ func (s *Stream) Unsubscribe(u string) {
 // Subscribers is a function because we want to make it sure to be read-only.
 func (s *Stream) Subscribers() []string {
 	return s.subscribers
+}
+
+// IsSubscribed checks whether an user is already subscribed.
+func (s *Stream) IsSubscribed(u string) bool {
+	for _, v := range s.subscribers {
+		if u == v {
+			return true
+		}
+	}
+	return false
 }
 
 // Name returns the name of the stream.
@@ -86,7 +106,9 @@ func (s *Stream) routine() {
 			if !ok {
 				s.newUsers = nil
 			}
-			s.subscribers = append(s.subscribers, x)
+			if !s.IsSubscribed(x) {
+				s.subscribers = append(s.subscribers, x)
+			}
 		case x, ok := <-s.channel:
 			if !ok {
 				s.channel = nil
@@ -101,7 +123,7 @@ func (s *Stream) routine() {
 			}
 		}
 
-		if s.channel == nil && s.newUsers == nil {
+		if s.channel == nil && s.newUsers == nil && s.deleteUsers == nil {
 			break
 		}
 	}
