@@ -70,7 +70,7 @@ const (
 	OsuChannelJoin           // string - not hard to guess what it is and what it sends
 	BanchoChannelJoinSuccess // string - Tells the client they have been successfully subscribed to a channel.
 	BanchoChannelAvailable   // string, string, short - Channel name, description and current number of users.
-	BanchoChannelRevoked
+	BanchoChannelRevoked     // string - Channel to remove from the client.
 	BanchoChannelAvailableAutojoin
 	OsuBeatmapInfoRequest // []string? Looks like array length (uint32 this time) and then lotsa strings. Requests info about beatmaps, requiring a subsequent response with BanchoBeatmapInfoReply I suppose.
 	BanchoBeatmapInfoReply

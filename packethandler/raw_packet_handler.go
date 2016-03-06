@@ -26,6 +26,8 @@ func RawPacketHandler(pack inbound.BasePacket, s *Session) (delAfter bool) {
 		HandleMessage(pack, s)
 	case pid.OsuChannelJoin:
 		HandleChannelJoin(pack, s)
+	case pid.OsuChannelLeave:
+		HandleChannelPart(pack, s)
 	case pid.OsuExit:
 		UserQuit(s)
 		delAfter = true

@@ -37,5 +37,8 @@ func HandleMessage(p inbound.BasePacket, s *Session) {
 	if st == nil {
 		return
 	}
+	if !st.IsSubscribed(s.User.Token) {
+		SendMessage(s.User.Token, "You haven't joined that channel.")
+	}
 	st.Send(m.ToPacket(s))
 }
