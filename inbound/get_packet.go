@@ -35,6 +35,7 @@ func GetPacket(i io.Reader) (b BasePacket, errF error) {
 
 	if contentLength > MaximumContentLength {
 		errF = fmt.Errorf("are you seriously going to make us believe there's a packet which size is more than %d?! (contentLength: %d)", MaximumContentLength, contentLength)
+		return
 	}
 
 	b.Content = make([]byte, contentLength)
