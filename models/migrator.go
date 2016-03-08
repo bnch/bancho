@@ -15,6 +15,25 @@ var cachedDB *gorm.DB
 // Migrate automatically migrates the passed database to the latest version.
 func Migrate(db *gorm.DB) error {
 	fmt.Println("==> migrating database...")
+
+	// In gorm 1.0, they updated the way they handle CamelCase to snake_case. Thus, DBName is no more d_b_name.
+	// Which makes sense, but has broken absolutely everything.
+	// So we are renaming d_b_vers to db_vers if d_b_vers still exists.
+	db.Exec(`SELECT Count(*)
+INTO @exists
+FROM information_schema.tables 
+WHERE table_schema = ?
+    AND table_type = 'BASE TABLE'
+    AND table_name = 'd_b_vers';
+
+SET @query = If(@exists>0,
+    'RENAME TABLE d_b_vers TO db_vers',
+    'SELECT \'nothing to rename\' status');
+
+PREPARE stmt FROM @query; 
+
+EXECUTE stmt;`)
+
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&DBVer{})
 	v := DBVer{}
 	db.First(&v)
