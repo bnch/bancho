@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/bnch/bancho/packets"
@@ -15,13 +16,13 @@ type Session struct {
 	stream      *bytes.Buffer
 	User        User
 	LastRequest time.Time
+	Mutex       *sync.Mutex
 }
 
 // Push appends an element to the current session.
 func (s Session) Push(val ...packets.Packet) {
-	if s.stream == nil {
-		s.stream = new(bytes.Buffer)
-	}
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
 	dumper := banchoreader.New()
 	dumper.Colored = true
 	fmt.Printf("> To: %s\n", s.User.Name)
@@ -52,12 +53,36 @@ func NewSession(u User) (*Session, string) {
 		}
 	}
 	u.Token = tok
-	return &Session{
+	sess := &Session{
 		stream:      new(bytes.Buffer),
 		User:        u,
 		LastRequest: time.Now(),
-	}, u.Token
+		Mutex:       &sync.Mutex{},
+	}
+	sessionsMutex.Lock()
+	defer sessionsMutex.Unlock()
+	sessions[tok] = sess
+	return sess, tok
+}
+
+// GetSession retrieves a session from the available ones.
+func GetSession(sessName string) *Session {
+	sessionsMutex.Lock()
+	defer sessionsMutex.Unlock()
+	return sessions[sessName]
+}
+
+// CopySessions can be used to get an independent copy of sessions, without need to use the sessionMutex to modify it.
+func CopySessions() map[string]*Session {
+	sessionsMutex.Lock()
+	defer sessionsMutex.Unlock()
+	ret := make(map[string]*Session, len(sessions))
+	for k, v := range sessions {
+		ret[k] = v
+	}
+	return ret
 }
 
 // Sessions is a map of connections to the server via the bancho protocol.
 var sessions map[string]*Session
+var sessionsMutex *sync.Mutex

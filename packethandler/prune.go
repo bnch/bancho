@@ -11,8 +11,10 @@ func Prune() {
 	for {
 		for k, v := range sessions {
 			if time.Since(v.LastRequest) > sessionTimeout {
+				sessionsMutex.Lock()
 				UserQuit(v)
 				delete(sessions, k)
+				sessionsMutex.Unlock()
 			}
 		}
 		time.Sleep(time.Second * 10)

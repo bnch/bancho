@@ -27,6 +27,8 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 			fmt.Println(string(debug.Stack()))
 		}
 	}()
+	
+	var self *Session
 
 	// The user wants to login
 	if token == "" {
@@ -39,15 +41,19 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 		if err != nil {
 			return token, err
 		}
-	} else if sessions[token] == nil || sessions[token].User.ID == 0 {
+		self = GetSession(token)
+	} else if self = GetSession(token); self == nil || self.User.ID == 0 {
 		sendBackToken = true
 		deleteAfterwards = true
 		token = GenerateGUID()
-		sessions[token] = &Session{
+		self = &Session{
 			LastRequest: time.Now(),
 			stream:      new(bytes.Buffer),
 		}
-		sessions[token].Push(
+		sessionsMutex.Lock()
+		sessions[token] = self
+		sessionsMutex.Unlock()
+		self.Push(
 			packets.OrangeNotification("Your session expired. Nothing to worry about - just log in again!"),
 			packets.UserID(-1),
 		)
@@ -65,15 +71,17 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 			r := banchoreader.New()
 			r.Colored = true
 			r.DumpPacket(os.Stdout, pack)
-			deleteAfterwards = RawPacketHandler(pack, sessions[token])
+			deleteAfterwards = RawPacketHandler(pack, self)
 		}
 	}
 
 	// Make up response, putting together all the accumulated packets.
-	io.Copy(output, sessions[token].stream)
+	io.Copy(output, self.stream)
 
 	if deleteAfterwards {
+		sessionsMutex.Lock()
 		delete(sessions, token)
+		sessionsMutex.Unlock()
 	}
 
 	if sendBackToken {

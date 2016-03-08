@@ -9,6 +9,14 @@ import (
 
 // RawPacketHandler handles inbound packets, and sends them to be analysed by functions.
 func RawPacketHandler(pack inbound.BasePacket, s *Session) (delAfter bool) {
+	if pack.ID == pid.OsuExit {
+		UserQuit(s)
+		delAfter = true
+	}
+	go rawPacketHandler(pack, s)
+	return
+}
+func rawPacketHandler(pack inbound.BasePacket, s *Session) {
 	s.LastRequest = time.Now()
 	switch pack.ID {
 	case pid.OsuSendUserState:
@@ -19,9 +27,5 @@ func RawPacketHandler(pack inbound.BasePacket, s *Session) (delAfter bool) {
 		HandleChannelJoin(pack, s)
 	case pid.OsuChannelLeave:
 		HandleChannelPart(pack, s)
-	case pid.OsuExit:
-		UserQuit(s)
-		delAfter = true
 	}
-	return
 }
