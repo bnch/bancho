@@ -63,7 +63,7 @@ func signupPOST(c *gin.Context) {
 	dbUser := models.User{
 		Username:    user,
 		Password:    pass,
-		Permissions: models.PermissionAdmin,
+		Permissions: 0,
 	}
 	db.Create(&dbUser)
 	go func() {
