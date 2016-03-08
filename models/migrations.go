@@ -65,7 +65,10 @@ var migrations = map[uint64]func(*gorm.DB){
 }
 
 func renameColumns(cols map[string]string, tableName string, db *gorm.DB) {
-	r, _ := db.Exec("SHOW FIELDS FROM " + tableName).Rows()
+	r, err := db.DB().Query("SHOW FIELDS FROM " + tableName)
+	if err != nil {
+		panic(err)
+	}
 	for r.Next() {
 		var field string
 		var fType string
@@ -73,7 +76,7 @@ func renameColumns(cols map[string]string, tableName string, db *gorm.DB) {
 		var none string
 		r.Scan(&field, &fType, &none, &none, &none, &extra)
 		if v, ok := cols[field]; ok {
-			db.Exec("ALTER TABLE ? CHANGE " + field + " " + v + " " + fType + " " + extra)
+			db.Exec("ALTER TABLE " + tableName + " CHANGE " + field + " " + v + " " + fType + " " + extra)
 		}
 	}
 }
