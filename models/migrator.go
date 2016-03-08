@@ -16,6 +16,11 @@ var cachedDB *gorm.DB
 func Migrate(db *gorm.DB) error {
 	fmt.Println("==> migrating database...")
 
+	c, err := conf.Get()
+	if err != nil {
+		return err
+	}
+
 	// In gorm 1.0, they updated the way they handle CamelCase to snake_case. Thus, DBName is no more d_b_name.
 	// Which makes sense, but has broken absolutely everything.
 	// So we are renaming d_b_vers to db_vers if d_b_vers still exists.
@@ -32,7 +37,7 @@ SET @query = If(@exists>0,
 
 PREPARE stmt FROM @query; 
 
-EXECUTE stmt;`)
+EXECUTE stmt;`, c.SQLInfo.Name)
 
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&DBVer{})
 	v := DBVer{}
