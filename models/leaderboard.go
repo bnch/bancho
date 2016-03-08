@@ -7,9 +7,9 @@ import (
 )
 
 var modes = [...]string{
-	"s_t_d",
+	"std",
 	"taiko",
-	"c_t_b",
+	"ctb",
 	"mania",
 }
 

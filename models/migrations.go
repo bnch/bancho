@@ -42,4 +42,38 @@ var migrations = map[uint64]func(*gorm.DB){
 		db.CreateTable(&Leaderboard{})
 		BuildLeaderboard(db)
 	},
+	1457450104: func(db *gorm.DB) {
+		renamesLeaderboard := map[string]string{
+			"s_t_d": "std",
+			"c_t_b": "ctb",
+		}
+		renamesUserStats := map[string]string{
+			"p_p_s_t_d":          "ppstd",
+			"p_p_taiko":          "pp_taiko",
+			"p_p_c_t_b":          "ppctb",
+			"p_p_mania":          "pp_mania",
+			"total_score_s_t_d":  "total_score_std",
+			"total_score_c_t_b":  "total_score_ctb",
+			"ranked_score_s_t_d": "ranked_score_std",
+			"ranked_score_c_t_b": "ranked_score_ctb",
+			"accuracy_s_t_d":     "accuracy_std",
+			"accuracy_c_t_b":     "accuracy_ctb",
+		}
+		renameColumns(renamesLeaderboard, "leaderboards", db)
+		renameColumns(renamesUserStats, "user_stats", db)
+	},
+}
+
+func renameColumns(cols map[string]string, tableName string, db *gorm.DB) {
+	r, _ := db.Exec("SHOW FIELDS FROM " + tableName).Rows()
+	for r.Next() {
+		var field string
+		var fType string
+		var extra string
+		var none string
+		r.Scan(&field, &fType, &none, &none, &none, &extra)
+		if v, ok := cols[field]; ok {
+			db.Exec("ALTER TABLE ? CHANGE " + field + " " + v + " " + fType + " " + extra)
+		}
+	}
 }
