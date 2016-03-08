@@ -9,6 +9,11 @@ import (
 // Braindead helps the poor little windows users that don't know what's
 // a terminal, and have opened bancho by doubleclicking on the executable
 func Braindead() {
+	c := recover()
+	if c != nil {
+		fmt.Println("An error happened while attempting to execute bnch.")
+		fmt.Println(c)
+	}
 	if runtime.GOOS == "windows" {
 		fmt.Print("Press a key to continue . . .")
 		os.Stdin.Read(make([]byte, 1))
