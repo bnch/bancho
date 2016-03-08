@@ -1,15 +1,16 @@
 package frontendserver
 
 import (
+	"os"
+
 	"github.com/bnch/bancho/bindata"
 	"github.com/bnch/bancho/models"
 	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"os"
 )
 
-var db gorm.DB
+var db *gorm.DB
 var frontendFolderExists bool
 
 // Make creates a gin engine able to respond properly to requests.

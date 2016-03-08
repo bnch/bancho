@@ -16,7 +16,7 @@ func MkUser(c *cli.Context) {
 	user := a[0]
 	pass := a[1]
 	var err error
-	var db gorm.DB
+	var db *gorm.DB
 	db, err = models.CreateDB()
 	if err != nil {
 		panic(err)

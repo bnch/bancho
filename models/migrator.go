@@ -13,7 +13,7 @@ import (
 var cachedDB *gorm.DB
 
 // Migrate automatically migrates the passed database to the latest version.
-func Migrate(db gorm.DB) error {
+func Migrate(db *gorm.DB) error {
 	fmt.Println("==> migrating database...")
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&DBVer{})
 	v := DBVer{}
@@ -35,13 +35,13 @@ func Migrate(db gorm.DB) error {
 }
 
 // CreateDB creates an instance of a Gorm database.
-func CreateDB() (gorm.DB, error) {
+func CreateDB() (*gorm.DB, error) {
 	if cachedDB != nil {
-		return *cachedDB, nil
+		return cachedDB, nil
 	}
 	c, err := conf.Get()
 	if err != nil {
-		return gorm.DB{}, err
+		return &gorm.DB{}, err
 	}
 	db, err := gorm.Open(
 		c.SQLInfo.DBType,
@@ -49,7 +49,7 @@ func CreateDB() (gorm.DB, error) {
 	)
 	db.LogMode(true)
 	if err != nil {
-		cachedDB = &db
+		cachedDB = db
 	}
 	return db, err
 }

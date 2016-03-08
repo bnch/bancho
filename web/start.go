@@ -2,17 +2,18 @@ package web
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"os"
+
 	"github.com/bnch/bancho/avatarserver"
 	"github.com/bnch/bancho/frontendserver"
 	"github.com/bnch/bancho/models"
 	"github.com/bnch/bancho/packethandler"
 	"github.com/jinzhu/gorm"
-	"log"
-	"net/http"
-	"os"
 )
 
-var db gorm.DB
+var db *gorm.DB
 
 // Start begins the webserver for bancho, and starts processing requests to the server.
 func Start(addrHTTP, addrHTTPS string) {

@@ -58,7 +58,7 @@ func (u User) GetColour() byte {
 }
 
 // RelatedUserStats finds the UserStats of an user.
-func (u User) RelatedUserStats(db gorm.DB) UserStats {
+func (u User) RelatedUserStats(db *gorm.DB) UserStats {
 	user := UserStats{}
 	db.First(&user, u.ID)
 	return user

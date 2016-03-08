@@ -5,7 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-var db gorm.DB
+var db *gorm.DB
 
 // SetUp is needed to make things work and should always be called unless you have a very good fucking reason for not doing it.
 func SetUp() {

@@ -24,7 +24,7 @@ type Leaderboard struct {
 
 // UpdateLeaderboard queries an update to the database for a certain user.
 // Partly taken from https://github.com/osuripple/ripple/blob/00287748552fb8b7b59deccfb9347e87e2d07f77/osu.ppy.sh/inc/pages/Leaderboard.php#L146
-func (u UserStats) UpdateLeaderboard(mode byte, db gorm.DB) error {
+func (u UserStats) UpdateLeaderboard(mode byte, db *gorm.DB) error {
 	if mode > 3 {
 		return errors.New("models/UserStats.UpdateLeaderboard: invalid mode number")
 	}
@@ -116,7 +116,7 @@ func (u Leaderboard) choose(mode byte) uint32 {
 }
 
 // BuildLeaderboard makes the leaderboard.
-func BuildLeaderboard(db gorm.DB) {
+func BuildLeaderboard(db *gorm.DB) {
 	var c int
 	db.Model(&User{}).Count(&c)
 	leaderboard := make(map[int]*Leaderboard, c)

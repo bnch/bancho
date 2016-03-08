@@ -33,7 +33,7 @@ type UserStats struct {
 }
 
 // RelatedUser finds the User that is related to a certain UserStats.
-func (u UserStats) RelatedUser(db gorm.DB) User {
+func (u UserStats) RelatedUser(db *gorm.DB) User {
 	user := User{}
 	db.First(&user, u.ID)
 	return user
