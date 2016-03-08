@@ -47,7 +47,7 @@ func NewSession(u User) (*Session, string) {
 	for {
 		tok = GenerateGUID()
 		// Make sure token does not already exist
-		if _, ok := Sessions[tok]; !ok {
+		if _, ok := sessions[tok]; !ok {
 			break
 		}
 	}
@@ -60,4 +60,4 @@ func NewSession(u User) (*Session, string) {
 }
 
 // Sessions is a map of connections to the server via the bancho protocol.
-var Sessions map[string]*Session
+var sessions map[string]*Session

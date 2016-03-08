@@ -2,10 +2,10 @@ package packethandler
 
 // GetUserIDs retrieves all the online users' IDs.
 func GetUserIDs() []int32 {
-	users := make([]int32, len(Sessions)+1)
+	users := make([]int32, len(sessions)+1)
 	users[0] = BotID
 	i := 1
-	for _, sess := range Sessions {
+	for _, sess := range sessions {
 		if sess != nil && sess.User.ID != 0 {
 			if i >= len(users) {
 				users = append(users, sess.User.ID)

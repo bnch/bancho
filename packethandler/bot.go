@@ -10,7 +10,7 @@ const BotID = 1
 
 // SendMessage sends a private message to an user. (user being their token)
 func SendMessage(user string, message string) {
-	sess := Sessions[user]
+	sess := sessions[user]
 	if sess == nil {
 		return
 	}

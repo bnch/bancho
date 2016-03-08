@@ -114,7 +114,7 @@ func (s *Stream) routine() {
 				s.channel = nil
 			}
 			for _, u := range s.subscribers {
-				sess, ok := Sessions[u]
+				sess, ok := sessions[u]
 				if !ok {
 					s.Unsubscribe(u)
 					continue

@@ -12,7 +12,7 @@ const protocolVersion = 19
 // Login logs the user into bancho. Returns the osu! token and any eventual error.
 func Login(l logindata.LoginData) (string, bool, error) {
 	sess, guid := NewSession(User{})
-	Sessions[guid] = sess
+	sessions[guid] = sess
 
 	user := models.User{}
 	db.Where(&models.User{
@@ -20,13 +20,13 @@ func Login(l logindata.LoginData) (string, bool, error) {
 	}).First(&user)
 
 	if !common.IsSamePass(l.Password, user.Password) {
-		Sessions[guid].Push(
+		sessions[guid].Push(
 			packets.UserID(packets.LoginFailed),
 		)
 		return guid, true, nil
 	}
 	if (user.Permissions & models.PermissionBanned) != 0 {
-		Sessions[guid].Push(
+		sessions[guid].Push(
 			packets.UserID(packets.LoginBanned),
 		)
 		return guid, true, nil
@@ -37,7 +37,7 @@ func Login(l logindata.LoginData) (string, bool, error) {
 		privileges = packets.PrivilegeGMTSupporter
 	}
 
-	banchoUser := &Sessions[guid].User
+	banchoUser := &sessions[guid].User
 	banchoUser.Colour = user.GetColour()
 	banchoUser.Country = 108
 	banchoUser.UTCOffset = 24
@@ -45,7 +45,7 @@ func Login(l logindata.LoginData) (string, bool, error) {
 	banchoUser.Rank = 130
 	banchoUser.Name = user.Username
 
-	Sessions[guid].Push(
+	sessions[guid].Push(
 		packets.SilenceClient(0),
 		packets.UserID(banchoUser.ID),
 		packets.ChoProtocol(protocolVersion),
@@ -82,11 +82,11 @@ func Login(l logindata.LoginData) (string, bool, error) {
 		} else {
 			subsUint = uint16(subs)
 		}
-		Sessions[guid].Push(
+		sessions[guid].Push(
 			packets.ChannelTitle(c.Name, c.Description, subsUint),
 		)
 	}
-	Sessions[guid].Push(packets.ChannelListingComplete())
+	sessions[guid].Push(packets.ChannelListingComplete())
 
 	s := GetStream("all")
 	s.Subscribe(guid)

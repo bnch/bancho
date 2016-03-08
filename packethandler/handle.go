@@ -39,15 +39,15 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 		if err != nil {
 			return token, err
 		}
-	} else if Sessions[token] == nil || Sessions[token].User.ID == 0 {
+	} else if sessions[token] == nil || sessions[token].User.ID == 0 {
 		sendBackToken = true
 		deleteAfterwards = true
 		token = GenerateGUID()
-		Sessions[token] = &Session{
+		sessions[token] = &Session{
 			LastRequest: time.Now(),
 			stream:      new(bytes.Buffer),
 		}
-		Sessions[token].Push(
+		sessions[token].Push(
 			packets.OrangeNotification("Your session expired. Nothing to worry about - just log in again!"),
 			packets.UserID(-1),
 		)
@@ -65,15 +65,15 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 			r := banchoreader.New()
 			r.Colored = true
 			r.DumpPacket(os.Stdout, pack)
-			deleteAfterwards = RawPacketHandler(pack, Sessions[token])
+			deleteAfterwards = RawPacketHandler(pack, sessions[token])
 		}
 	}
 
 	// Make up response, putting together all the accumulated packets.
-	io.Copy(output, Sessions[token].stream)
+	io.Copy(output, sessions[token].stream)
 
 	if deleteAfterwards {
-		delete(Sessions, token)
+		delete(sessions, token)
 	}
 
 	if sendBackToken {
