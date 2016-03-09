@@ -23,26 +23,17 @@ type User struct {
 
 // IsBanned tells whether a user is banned.
 func (u User) IsBanned() bool {
-	if u.Permissions&PermissionBanned == 0 {
-		return false
-	}
-	return true
+	return u.Permissions&PermissionBanned != 0
 }
 
 // IsModerator tells whether a user is a moderator.
 func (u User) IsModerator() bool {
-	if u.Permissions&PermissionModerator == 0 {
-		return false
-	}
-	return true
+	return u.Permissions&PermissionModerator != 0
 }
 
 // IsAdmin tells whether a user is an admin.
 func (u User) IsAdmin() bool {
-	if u.Permissions&PermissionAdmin == 0 {
-		return false
-	}
-	return true
+	return u.Permissions&PermissionAdmin != 0
 }
 
 // GetColour gets an user's colour in the chat.
