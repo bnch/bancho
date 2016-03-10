@@ -33,7 +33,8 @@ implement SQLite, so that you won't even need mysql to get up and running.
 4. Run the executable again
 5. Add what's below in that big gray box with those 127.0.0.1 things to your
    hosts file.
-6. Open up stable fallback and then... profit?
+6. Connect to osu.ppy.sh in your browser, and sign up.
+7. Open up stable fallback and then... profit?
 
 ```
 127.0.0.1 osu.ppy.sh
