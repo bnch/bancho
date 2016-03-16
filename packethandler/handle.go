@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"runtime/debug"
+	"sync"
 	"time"
 
 	"github.com/bnch/bancho/inbound"
@@ -27,7 +28,7 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 			fmt.Println(string(debug.Stack()))
 		}
 	}()
-	
+
 	var self *Session
 
 	// The user wants to login
@@ -49,6 +50,7 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 		self = &Session{
 			LastRequest: time.Now(),
 			stream:      new(bytes.Buffer),
+			Mutex:       &sync.Mutex{},
 		}
 		sessionsMutex.Lock()
 		sessions[token] = self
