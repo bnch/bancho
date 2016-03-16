@@ -6,9 +6,14 @@ import (
 
 // User ranks
 const (
-	PrivilegeNormal       = 1
-	PrivilegeGMT          = 2
-	PrivilegeSupporter    = 4
+	PrivilegeNormalest = 0
+	PrivilegeNormal    = 1 << iota
+	PrivilegeGMT
+	PrivilegeSupporter
+	PrivilegePeppy
+	PrivilegeAdmin
+	PrivilegeTournamentStaff
+
 	PrivilegeGMTSupporter = PrivilegeSupporter | PrivilegeGMT
 )
 
