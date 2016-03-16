@@ -87,10 +87,22 @@ func Login(l logindata.LoginData) (string, bool, error) {
 
 	s := GetStream("all")
 	s.Subscribe(guid)
-	s.Send(packets.UserPresence(int32(user.ID)))
+	go sendUserPresence(s, int32(user.ID))
 
 	GetStream("chan/#osu").Subscribe(guid)
 	GetStream("chan/#announce").Subscribe(guid)
 
 	return guid, false, nil
+}
+
+func sendUserPresence(s *Stream, uid int32) {
+	count := 0
+	for _, session := range CopySessions() {
+		if session.User.ID == uid {
+			count++
+		}
+	}
+	if count < 2 {
+		s.Send(packets.UserPresence(uid))
+	}
 }
