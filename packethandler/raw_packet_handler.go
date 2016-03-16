@@ -12,6 +12,7 @@ func RawPacketHandler(pack inbound.BasePacket, s *Session) (delAfter bool) {
 	if pack.ID == pid.OsuExit {
 		UserQuit(s)
 		delAfter = true
+		return
 	}
 	go rawPacketHandler(pack, s)
 	return

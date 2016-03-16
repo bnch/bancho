@@ -11,6 +11,9 @@ import (
 	"github.com/bnch/banchoreader/lib"
 )
 
+var sessions map[string]*Session
+var sessionsMutex *sync.RWMutex
+
 // Session is an alive connection of a logged in user.
 type Session struct {
 	stream      *bytes.Buffer
@@ -67,22 +70,18 @@ func NewSession(u User) (*Session, string) {
 
 // GetSession retrieves a session from the available ones.
 func GetSession(sessName string) *Session {
-	sessionsMutex.Lock()
-	defer sessionsMutex.Unlock()
+	sessionsMutex.RLock()
+	defer sessionsMutex.RUnlock()
 	return sessions[sessName]
 }
 
 // CopySessions can be used to get an independent copy of sessions, without need to use the sessionMutex to modify it.
 func CopySessions() map[string]*Session {
-	sessionsMutex.Lock()
-	defer sessionsMutex.Unlock()
+	sessionsMutex.RLock()
+	defer sessionsMutex.RUnlock()
 	ret := make(map[string]*Session, len(sessions))
 	for k, v := range sessions {
 		ret[k] = v
 	}
 	return ret
 }
-
-// Sessions is a map of connections to the server via the bancho protocol.
-var sessions map[string]*Session
-var sessionsMutex *sync.Mutex
