@@ -9,7 +9,7 @@ import (
 // Warning: very low-level code which you probably don't need to touch ahead.
 
 var streams map[string]*Stream
-var streamsMutex *sync.Mutex
+var streamsMutex *sync.RWMutex
 
 // Stream is a way to handle sending of packets to multiple users.
 type Stream struct {
@@ -32,8 +32,8 @@ func NewStream(name string) *Stream {
 
 // GetStream returns an existing stream if it does exist, nil otherwise.
 func GetStream(name string) *Stream {
-	streamsMutex.Lock()
-	defer streamsMutex.Unlock()
+	streamsMutex.RLock()
+	defer streamsMutex.RUnlock()
 	if stream, ok := streams[name]; ok {
 		return stream
 	}
