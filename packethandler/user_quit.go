@@ -23,3 +23,16 @@ func UserQuit(ps packSess) {
 
 	st.Send(packets.UserQuit(ps.s.User.ID))
 }
+
+// DeleteCompletely deletes all traces of the user in the RAM.
+func DeleteCompletely(token string) {
+	sessionsMutex.RLock()
+	uid := sessions[token].User.ID
+	sessionsMutex.RUnlock()
+	sessionsMutex.Lock()
+	delete(sessions, token)
+	sessionsMutex.Unlock()
+	uidToSessionMutex.Lock()
+	delete(uidToSession, uid)
+	uidToSessionMutex.Unlock()
+}

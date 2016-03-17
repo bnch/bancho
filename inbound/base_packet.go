@@ -2,6 +2,7 @@ package inbound
 
 import (
 	"bytes"
+
 	"github.com/bnch/osubinary"
 )
 

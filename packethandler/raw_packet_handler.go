@@ -37,5 +37,7 @@ func rawPacketHandler(ps packSess) {
 		HandleChannelJoin(ps)
 	case pid.OsuChannelLeave:
 		HandleChannelPart(ps)
+	case pid.OsuUserStatsRequest:
+		HandleUserStatsRequest(ps)
 	}
 }

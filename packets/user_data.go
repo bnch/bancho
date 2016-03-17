@@ -3,6 +3,7 @@ package packets
 import (
 	"bytes"
 	"encoding/binary"
+
 	"github.com/bnch/bancho/pid"
 )
 

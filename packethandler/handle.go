@@ -81,9 +81,7 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 	io.Copy(output, self.stream)
 
 	if deleteAfterwards {
-		sessionsMutex.Lock()
-		delete(sessions, token)
-		sessionsMutex.Unlock()
+		DeleteCompletely(token)
 	}
 
 	if sendBackToken {

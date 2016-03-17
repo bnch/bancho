@@ -14,6 +14,9 @@ import (
 var sessions map[string]*Session
 var sessionsMutex *sync.RWMutex
 
+var uidToSession map[int32]*Session
+var uidToSessionMutex *sync.RWMutex
+
 // Session is an alive connection of a logged in user.
 type Session struct {
 	stream      *bytes.Buffer
@@ -63,8 +66,8 @@ func NewSession(u User) (*Session, string) {
 		Mutex:       &sync.Mutex{},
 	}
 	sessionsMutex.Lock()
-	defer sessionsMutex.Unlock()
 	sessions[tok] = sess
+	sessionsMutex.Unlock()
 	return sess, tok
 }
 

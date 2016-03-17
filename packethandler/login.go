@@ -85,6 +85,10 @@ func Login(l logindata.LoginData) (string, bool, error) {
 	}
 	sess.Push(packets.ChannelListingComplete())
 
+	uidToSessionMutex.Lock()
+	uidToSession[int32(user.ID)] = sess
+	uidToSessionMutex.Unlock()
+
 	s := GetStream("all")
 	s.Subscribe(guid)
 	go sendUserPresence(s, int32(user.ID))
