@@ -1,9 +1,6 @@
 package packethandler
 
-import (
-	"github.com/bnch/bancho/inbound"
-	"github.com/bnch/bancho/packets"
-)
+import "github.com/bnch/bancho/packets"
 
 // ChatMessage is a message in the osu! chat.
 type ChatMessage struct {
@@ -26,19 +23,19 @@ func (c ChatMessage) ToPacketNoIgnore() packets.Packet {
 }
 
 // HandleMessage broadcasts a received message to all users.
-func HandleMessage(p inbound.BasePacket, s *Session) {
+func HandleMessage(ps packSess) {
 	m := ChatMessage{}
-	p.Unmarshal(&m.From, &m.Content, &m.To, &m.UserID)
+	ps.p.Unmarshal(&m.From, &m.Content, &m.To, &m.UserID)
 
-	m.From = s.User.Name
-	m.UserID = s.User.ID
+	m.From = ps.s.User.Name
+	m.UserID = ps.s.User.ID
 
 	st := GetStream("chan/" + m.To)
 	if st == nil {
 		return
 	}
-	if !st.IsSubscribed(s.User.Token) {
-		SendMessage(s.User.Token, "You haven't joined that channel.")
+	if !st.IsSubscribed(ps.s.User.Token) {
+		SendMessage(ps.s.User.Token, "You haven't joined that channel.")
 	}
-	st.Send(m.ToPacket(s))
+	st.Send(m.ToPacket(ps.s))
 }

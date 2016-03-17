@@ -7,26 +7,35 @@ import (
 	"github.com/bnch/bancho/pid"
 )
 
+type packSess struct {
+	p inbound.BasePacket
+	s *Session
+}
+
 // RawPacketHandler handles inbound packets, and sends them to be analysed by functions.
 func RawPacketHandler(pack inbound.BasePacket, s *Session) (delAfter bool) {
+	ps := packSess{
+		p: pack,
+		s: s,
+	}
 	if pack.ID == pid.OsuExit {
-		UserQuit(s)
+		UserQuit(ps)
 		delAfter = true
 		return
 	}
-	go rawPacketHandler(pack, s)
+	go rawPacketHandler(ps)
 	return
 }
-func rawPacketHandler(pack inbound.BasePacket, s *Session) {
-	s.LastRequest = time.Now()
-	switch pack.ID {
+func rawPacketHandler(ps packSess) {
+	ps.s.LastRequest = time.Now()
+	switch ps.p.ID {
 	case pid.OsuSendUserState:
-		pack.Unmarshal(&s.User.Status.Status, &s.User.Status.Text, &s.User.Status.MapMD5)
+		ps.p.Unmarshal(&ps.s.User.Status.Status, &ps.s.User.Status.Text, &ps.s.User.Status.MapMD5)
 	case pid.OsuSendIRCMessage:
-		HandleMessage(pack, s)
+		HandleMessage(ps)
 	case pid.OsuChannelJoin:
-		HandleChannelJoin(pack, s)
+		HandleChannelJoin(ps)
 	case pid.OsuChannelLeave:
-		HandleChannelPart(pack, s)
+		HandleChannelPart(ps)
 	}
 }

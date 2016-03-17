@@ -5,13 +5,13 @@ import (
 )
 
 // UserQuit tells everyone that an user has quit.
-func UserQuit(s *Session) {
+func UserQuit(ps packSess) {
 	st := GetStream("all")
-	st.Unsubscribe(s.User.Token)
+	st.Unsubscribe(ps.s.User.Token)
 
 	// Don't tell other users we quit if there's still someone with our identity online.
 	count := 0
-	myID := s.User.ID
+	myID := ps.s.User.ID
 	for _, session := range CopySessions() {
 		if session.User.ID == myID {
 			count++
@@ -21,5 +21,5 @@ func UserQuit(s *Session) {
 		return
 	}
 
-	st.Send(packets.UserQuit(s.User.ID))
+	st.Send(packets.UserQuit(ps.s.User.ID))
 }

@@ -1,15 +1,14 @@
 package packethandler
 
 import (
-	"github.com/bnch/bancho/inbound"
 	"github.com/bnch/bancho/models"
 	"github.com/bnch/bancho/packets"
 )
 
 // HandleChannelJoin handles requests to join a channel.
-func HandleChannelJoin(pack inbound.BasePacket, s *Session) {
+func HandleChannelJoin(ps packSess) {
 	var channelToJoin string
-	pack.Unmarshal(&channelToJoin)
+	ps.p.Unmarshal(&channelToJoin)
 
 	var chans []models.Channel
 	db.Find(&chans)
@@ -22,26 +21,26 @@ func HandleChannelJoin(pack inbound.BasePacket, s *Session) {
 	}
 	if found {
 		st := GetInitialisedStream("chan/" + channelToJoin)
-		st.Subscribe(s.User.Token)
-		s.Push(packets.ChannelJoin(channelToJoin))
+		st.Subscribe(ps.s.User.Token)
+		ps.s.Push(packets.ChannelJoin(channelToJoin))
 	} else {
-		SendMessage(s.User.Token, "No such channel exists!")
-		s.Push(packets.ChannelRemove(channelToJoin))
+		SendMessage(ps.s.User.Token, "No such channel exists!")
+		ps.s.Push(packets.ChannelRemove(channelToJoin))
 	}
 }
 
 // HandleChannelPart handles requests to part from a channel.
-func HandleChannelPart(pack inbound.BasePacket, s *Session) {
+func HandleChannelPart(ps packSess) {
 	var channelToPart string
-	pack.Unmarshal(&channelToPart)
+	ps.p.Unmarshal(&channelToPart)
 
 	// I'll confess: I made these just so I could chuckle a bit.
 	st := GetStream("chan/" + channelToPart)
 	if st == nil {
-		SendMessage(s.User.Token, "w00t p00t! That channel doesn't even exist, yet you're requesting to part from it? What are you, an akerino?!")
-	} else if !st.IsSubscribed(s.User.Token) {
-		SendMessage(s.User.Token, "dude, the fuck? You aren't even in that channel, how am I supposed to make you part from it?")
+		SendMessage(ps.s.User.Token, "w00t p00t! That channel doesn't even exist, yet you're requesting to part from it? What are you, an akerino?!")
+	} else if !st.IsSubscribed(ps.s.User.Token) {
+		SendMessage(ps.s.User.Token, "dude, the fuck? You aren't even in that channel, how am I supposed to make you part from it?")
 	} else {
-		st.Unsubscribe(s.User.Token)
+		st.Unsubscribe(ps.s.User.Token)
 	}
 }
