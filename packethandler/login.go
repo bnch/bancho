@@ -41,7 +41,7 @@ func Login(l logindata.LoginData) (string, bool, error) {
 	banchoUser.Country = 108
 	banchoUser.UTCOffset = 24
 	banchoUser.ID = int32(user.ID)
-	banchoUser.Rank = 130
+	banchoUser.Rank = 1337
 	banchoUser.Name = user.Username
 
 	sess.Push(
@@ -68,9 +68,8 @@ func Login(l logindata.LoginData) (string, bool, error) {
 		packets.ChannelJoin("#announce"),
 	)
 
-	var chans []models.Channel
-	db.Find(&chans)
-	for _, c := range chans {
+	channelsMutex.RLock()
+	for _, c := range channels {
 		st := GetInitialisedStream("chan/" + c.Name)
 		subs := len(st.Subscribers())
 		var subsUint uint16
@@ -83,6 +82,7 @@ func Login(l logindata.LoginData) (string, bool, error) {
 			packets.ChannelTitle(c.Name, c.Description, subsUint),
 		)
 	}
+	channelsMutex.RUnlock()
 	sess.Push(packets.ChannelListingComplete())
 
 	uidToSessionMutex.Lock()

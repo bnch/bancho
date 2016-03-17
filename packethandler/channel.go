@@ -1,24 +1,21 @@
 package packethandler
 
-import (
-	"github.com/bnch/bancho/models"
-	"github.com/bnch/bancho/packets"
-)
+import "github.com/bnch/bancho/packets"
 
 // HandleChannelJoin handles requests to join a channel.
 func HandleChannelJoin(ps packSess) {
 	var channelToJoin string
 	ps.p.Unmarshal(&channelToJoin)
 
-	var chans []models.Channel
-	db.Find(&chans)
 	var found bool
-	for _, val := range chans {
-		if val.Name == channelToJoin {
+	channelsMutex.RLock()
+	for _, c := range channels {
+		if c.Name == channelToJoin {
 			found = true
 			break
 		}
 	}
+	channelsMutex.RUnlock()
 	if found {
 		st := GetInitialisedStream("chan/" + channelToJoin)
 		st.Subscribe(ps.s.User.Token)
