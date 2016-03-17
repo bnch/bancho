@@ -88,3 +88,11 @@ func CopySessions() map[string]*Session {
 	}
 	return ret
 }
+
+// GetSessionByID returns a session retrieving it using its user's ID.
+func GetSessionByID(id int32) *Session {
+	uidToSessionMutex.RLock()
+	defer uidToSessionMutex.RUnlock()
+	v, _ := uidToSession[id]
+	return v
+}

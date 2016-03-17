@@ -29,9 +29,11 @@ func DeleteCompletely(token string) {
 	sessionsMutex.RLock()
 	uid := sessions[token].User.ID
 	sessionsMutex.RUnlock()
+
 	sessionsMutex.Lock()
 	delete(sessions, token)
 	sessionsMutex.Unlock()
+
 	uidToSessionMutex.Lock()
 	delete(uidToSession, uid)
 	uidToSessionMutex.Unlock()

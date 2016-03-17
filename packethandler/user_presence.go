@@ -9,8 +9,6 @@ func HandleUserStatsRequest(ps packSess) {
 	if err != nil {
 		return
 	}
-	uidToSessionMutex.RLock()
-	defer uidToSessionMutex.RUnlock()
 	for _, v := range usersRequested {
 		if v == BotID {
 			ps.s.Push(packets.UserData(packets.UserDataInfo{
@@ -19,10 +17,7 @@ func HandleUserStatsRequest(ps packSess) {
 			}))
 			continue
 		}
-		u, exists := uidToSession[v]
-		if !exists {
-			continue
-		}
+		u := GetSessionByID(v)
 		if u != nil {
 			ps.s.Push(packets.UserData(u.User.ToUserDataInfo()))
 		}
