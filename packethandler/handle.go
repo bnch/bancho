@@ -2,6 +2,7 @@ package packethandler
 
 import (
 	"bytes"
+	"container/list"
 	"fmt"
 	"io"
 	"os"
@@ -49,8 +50,8 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 		token = GenerateGUID()
 		self = &Session{
 			LastRequest: time.Now(),
-			stream:      new(bytes.Buffer),
-			Mutex:       &sync.Mutex{},
+			stream:      list.New(),
+			mutex:       &sync.Mutex{},
 		}
 		sessionsMutex.Lock()
 		sessions[token] = self
@@ -78,7 +79,19 @@ func Handle(input []byte, output io.Writer, token string) (string, error) {
 	}
 
 	// Make up response, putting together all the accumulated packets.
-	io.Copy(output, self.stream)
+	self.mutex.Lock()
+	var e *list.Element
+	for {
+		e = self.stream.Front()
+		if e == nil {
+			break
+		}
+		if actualE, can := e.Value.([]byte); can {
+			output.Write(actualE)
+		}
+		self.stream.Remove(e)
+	}
+	self.mutex.Unlock()
 
 	if deleteAfterwards {
 		DeleteCompletely(token)

@@ -1,7 +1,7 @@
 package packethandler
 
 import (
-	"bytes"
+	"container/list"
 	"fmt"
 	"os"
 	"sync"
@@ -19,19 +19,19 @@ var uidToSessionMutex *sync.RWMutex
 
 // Session is an alive connection of a logged in user.
 type Session struct {
-	stream      *bytes.Buffer
+	stream      *list.List
+	mutex       *sync.Mutex
 	User        User
 	LastRequest time.Time
-	Mutex       *sync.Mutex
 }
 
 // Push appends an element to the current session.
 func (s Session) Push(val ...packets.Packet) {
-	s.Mutex.Lock()
-	defer s.Mutex.Unlock()
 	dumper := banchoreader.New()
 	dumper.Colored = true
 	fmt.Printf("> To: %s\n", s.User.Name)
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
 	for _, v := range val {
 		var c bool
 		for _, ignored := range v.Ignored {
@@ -43,7 +43,7 @@ func (s Session) Push(val ...packets.Packet) {
 		if c {
 			continue
 		}
-		s.stream.Write(v.Content)
+		s.stream.PushBack(v.Content)
 		dumper.Dump(os.Stdout, v.Content)
 	}
 }
@@ -60,10 +60,10 @@ func NewSession(u User) (*Session, string) {
 	}
 	u.Token = tok
 	sess := &Session{
-		stream:      new(bytes.Buffer),
+		stream:      list.New(),
+		mutex:       &sync.Mutex{},
 		User:        u,
 		LastRequest: time.Now(),
-		Mutex:       &sync.Mutex{},
 	}
 	sessionsMutex.Lock()
 	sessions[tok] = sess
