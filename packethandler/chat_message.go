@@ -24,11 +24,7 @@ func (c ChatMessage) ToPacketNoIgnore() packets.Packet {
 
 // HandleMessage broadcasts a received message to all users.
 func HandleMessage(ps packSess) {
-	m := ChatMessage{}
-	ps.p.Unmarshal(&m.From, &m.Content, &m.To, &m.UserID)
-
-	m.From = ps.s.User.Name
-	m.UserID = ps.s.User.ID
+	m := handleMessageInitial(ps)
 
 	st := GetStream("chan/" + m.To)
 	if st == nil {
@@ -38,4 +34,32 @@ func HandleMessage(ps packSess) {
 		SendMessage(ps.s.User.Token, "You haven't joined that channel.")
 	}
 	st.Send(m.ToPacket(ps.s))
+}
+
+// HandlePrivateMessage handles a message sent to a specific user.
+func HandlePrivateMessage(ps packSess) {
+	m := handleMessageInitial(ps)
+
+	if m.To == BotName {
+		// TODO: implement calling of bot library.
+		return
+	}
+
+	for _, v := range CopySessions() {
+		// TODO: usernameToSession
+		if v.User.Name == m.To {
+			v.Push(m.ToPacketNoIgnore())
+			return
+		}
+	}
+}
+
+func handleMessageInitial(ps packSess) ChatMessage {
+	m := ChatMessage{}
+	ps.p.Unmarshal(&m.From, &m.Content, &m.To, &m.UserID)
+
+	m.From = ps.s.User.Name
+	m.UserID = ps.s.User.ID
+
+	return m
 }

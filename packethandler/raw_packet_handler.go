@@ -39,5 +39,7 @@ func rawPacketHandler(ps packSess) {
 		HandleChannelPart(ps)
 	case pid.OsuUserStatsRequest:
 		HandleUserStatsRequest(ps)
+	case pid.OsuSendIRCMessagePrivate:
+		HandlePrivateMessage(ps)
 	}
 }
