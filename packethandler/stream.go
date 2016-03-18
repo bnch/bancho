@@ -6,8 +6,6 @@ import (
 	"github.com/bnch/bancho/packets"
 )
 
-// Warning: very low-level code which you probably don't need to touch ahead.
-
 var streams map[string]*Stream
 var streamsMutex *sync.RWMutex
 
@@ -15,14 +13,14 @@ var streamsMutex *sync.RWMutex
 type Stream struct {
 	name        string
 	subscribers []string
-	subsMutex   *sync.Mutex
+	subsMutex   *sync.RWMutex
 }
 
 // NewStream creates a new default stream
 func NewStream(name string) *Stream {
 	s := &Stream{
 		name:      name,
-		subsMutex: &sync.Mutex{},
+		subsMutex: &sync.RWMutex{},
 	}
 	streamsMutex.Lock()
 	streams[name] = s
@@ -89,15 +87,15 @@ func (s *Stream) unsubscribe(u string) {
 
 // Subscribers is a function because we want to make it sure to be read-only.
 func (s *Stream) Subscribers() []string {
-	s.subsMutex.Lock()
-	defer s.subsMutex.Unlock()
+	s.subsMutex.RLock()
+	defer s.subsMutex.RUnlock()
 	return s.subscribers
 }
 
 // IsSubscribed checks whether an user is already subscribed.
 func (s *Stream) IsSubscribed(u string) bool {
-	s.subsMutex.Lock()
-	defer s.subsMutex.Unlock()
+	s.subsMutex.RLock()
+	defer s.subsMutex.RUnlock()
 	return s.isSubscribed(u)
 }
 
@@ -122,7 +120,11 @@ func (s *Stream) Send(p packets.Packet) {
 }
 func (s *Stream) send(p packets.Packet) {
 	lSessions := CopySessions()
-	for _, u := range s.subscribers {
+	s.subsMutex.RLock()
+	subs := make([]string, len(s.subscribers))
+	copy(subs, s.subscribers)
+	s.subsMutex.RUnlock()
+	for _, u := range subs {
 		sess, ok := lSessions[u]
 		if !ok {
 			s.Unsubscribe(u)
